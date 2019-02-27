@@ -3,7 +3,7 @@ package hjsentinel
 import (
 	"errors"
 	"fmt"
-	"github.com/mediocregopher/radix"
+	"github.com/mediocregopher/radix/v3"
 	"log"
 	"time"
 )

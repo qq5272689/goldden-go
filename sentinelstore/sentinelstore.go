@@ -7,14 +7,13 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"net/http"
-	"strings"
-	"github.com/mediocregopher/radix"
 	"github.com/gorilla/securecookie"
 	"github.com/gorilla/sessions"
+	"github.com/mediocregopher/radix/v3"
+	"net/http"
 	"strconv"
+	"strings"
 )
-
 
 // 会话序列化接口
 type SessionSerializer interface {
@@ -76,7 +75,7 @@ func (s GobSerializer) Deserialize(d []byte, ss *sessions.Session) error {
 
 // SentinleStore类型
 type SentinleStore struct {
-	Sentinel          *radix.Sentinel
+	Sentinel      *radix.Sentinel
 	Codecs        []securecookie.Codec
 	Options       *sessions.Options
 	DefaultMaxAge int
@@ -116,14 +115,11 @@ func (s *SentinleStore) SetMaxAge(v int) {
 	}
 }
 
-
-
-
 // 创建sentine store
-func NewSentinelStore(Sentinel *radix.Sentinel,sessionExpire int, keyPairs ...[]byte) (*SentinleStore) {
+func NewSentinelStore(Sentinel *radix.Sentinel, sessionExpire int, keyPairs ...[]byte) *SentinleStore {
 	rs := &SentinleStore{
-		Sentinel:   Sentinel,
-		Codecs: securecookie.CodecsFromPairs(keyPairs...),
+		Sentinel: Sentinel,
+		Codecs:   securecookie.CodecsFromPairs(keyPairs...),
 		Options: &sessions.Options{
 			Path:   "/",
 			MaxAge: sessionExpire,
@@ -136,7 +132,6 @@ func NewSentinelStore(Sentinel *radix.Sentinel,sessionExpire int, keyPairs ...[]
 	return rs
 
 }
-
 
 // Close sentinel 连接
 func (s *SentinleStore) Close() error {
@@ -199,7 +194,7 @@ func (s *SentinleStore) Save(r *http.Request, w http.ResponseWriter, session *se
 // 删除session信息
 func (s *SentinleStore) Delete(r *http.Request, w http.ResponseWriter, session *sessions.Session) error {
 
-	if err := s.Sentinel.Do(radix.Cmd(nil,"DEL",s.keyPrefix+session.ID)); err != nil {
+	if err := s.Sentinel.Do(radix.Cmd(nil, "DEL", s.keyPrefix+session.ID)); err != nil {
 		return err
 	}
 	// 设置cookie过期
@@ -226,19 +221,19 @@ func (s *SentinleStore) save(session *sessions.Session) error {
 	if age == 0 {
 		age = s.DefaultMaxAge
 	}
-	return s.Sentinel.Do(radix.Cmd(nil,"SETEX",s.keyPrefix+session.ID, strconv.Itoa(age), string(b)))
+	return s.Sentinel.Do(radix.Cmd(nil, "SETEX", s.keyPrefix+session.ID, strconv.Itoa(age), string(b)))
 }
 
 // load 获取到的session信息
 func (s *SentinleStore) load(session *sessions.Session) (bool, error) {
 	var data []byte
-	if err := s.Sentinel.Do(radix.Cmd(&data,"GET",s.keyPrefix+session.ID)); err != nil {
-		return false,err
+	if err := s.Sentinel.Do(radix.Cmd(&data, "GET", s.keyPrefix+session.ID)); err != nil {
+		return false, err
 	}
 	return true, s.serializer.Deserialize(data, session)
 }
 
 // 删除redis上的session key
 func (s *SentinleStore) delete(session *sessions.Session) error {
-	return s.Sentinel.Do(radix.Cmd(nil,"DEL", s.keyPrefix+session.ID))
+	return s.Sentinel.Do(radix.Cmd(nil, "DEL", s.keyPrefix+session.ID))
 }

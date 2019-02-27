@@ -3,12 +3,12 @@ package sentinelstore
 import (
 	nSessions "github.com/goincremental/negroni-sessions"
 	gSessions "github.com/gorilla/sessions"
-	"github.com/mediocregopher/radix"
+	"github.com/mediocregopher/radix/v3"
 )
 
 //New returns a new Sentinel store
-func NewNegroniSentinelStore(Sentinel *radix.Sentinel,sessionExpire int, keyPairs ...[]byte) (nSessions.Store) {
-	store := NewSentinelStore(Sentinel,sessionExpire, keyPairs...)
+func NewNegroniSentinelStore(Sentinel *radix.Sentinel, sessionExpire int, keyPairs ...[]byte) nSessions.Store {
+	store := NewSentinelStore(Sentinel, sessionExpire, keyPairs...)
 	return &NegroniSentinleStore{store}
 }
 
@@ -25,4 +25,3 @@ func (c *NegroniSentinleStore) Options(options nSessions.Options) {
 		HttpOnly: options.HTTPOnly,
 	}
 }
-
