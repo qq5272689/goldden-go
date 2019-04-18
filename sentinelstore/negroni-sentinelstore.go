@@ -7,8 +7,13 @@ import (
 )
 
 //New returns a new Sentinel store
-func NewNegroniSentinelStore(Sentinel *radix.Sentinel, sessionExpire int, keyPairs ...[]byte) nSessions.Store {
-	store := NewSentinelStore(Sentinel, sessionExpire, keyPairs...)
+func NewNegroniSentinelGobStore(Sentinel *radix.Sentinel, sessionExpire int, keyPairs ...[]byte) nSessions.Store {
+	store := NewSentinelGobStore(Sentinel, sessionExpire, keyPairs...)
+	return &NegroniSentinleStore{store}
+}
+
+func NewNegroniSentinelJsonStore(Sentinel *radix.Sentinel, sessionExpire int, keyPairs ...[]byte) nSessions.Store {
+	store := NewSentinelJsonStore(Sentinel, sessionExpire, keyPairs...)
 	return &NegroniSentinleStore{store}
 }
 

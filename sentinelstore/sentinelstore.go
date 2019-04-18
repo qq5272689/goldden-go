@@ -116,7 +116,7 @@ func (s *SentinleStore) SetMaxAge(v int) {
 }
 
 // 创建sentine store
-func NewSentinelStore(Sentinel *radix.Sentinel, sessionExpire int, keyPairs ...[]byte) *SentinleStore {
+func NewSentinelGobStore(Sentinel *radix.Sentinel, sessionExpire int, keyPairs ...[]byte) *SentinleStore {
 	rs := &SentinleStore{
 		Sentinel: Sentinel,
 		Codecs:   securecookie.CodecsFromPairs(keyPairs...),
@@ -128,6 +128,23 @@ func NewSentinelStore(Sentinel *radix.Sentinel, sessionExpire int, keyPairs ...[
 		maxLength:     4096,
 		keyPrefix:     "session_",
 		serializer:    GobSerializer{},
+	}
+	return rs
+
+}
+
+func NewSentinelJsonStore(Sentinel *radix.Sentinel, sessionExpire int, keyPairs ...[]byte) *SentinleStore {
+	rs := &SentinleStore{
+		Sentinel: Sentinel,
+		Codecs:   securecookie.CodecsFromPairs(keyPairs...),
+		Options: &sessions.Options{
+			Path:   "/",
+			MaxAge: sessionExpire,
+		},
+		DefaultMaxAge: 60 * 20, // 默认MaxAge
+		maxLength:     4096,
+		keyPrefix:     "session_",
+		serializer:    JSONSerializer{},
 	}
 	return rs
 
