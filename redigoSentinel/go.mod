@@ -1,4 +1,4 @@
-module goutils/redigoSentinel
+module github.com/qq5272689/goutils/redigoSentinel
 
 require (
 	github.com/FZambia/sentinel v1.0.0 // indirect
