@@ -10,7 +10,6 @@ import (
 	"github.com/gomodule/redigo/redis"
 	"github.com/gorilla/securecookie"
 	"github.com/gorilla/sessions"
-	"github.com/mediocregopher/radix/v3"
 	"net/http"
 	"strconv"
 	"strings"
