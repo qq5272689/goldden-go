@@ -1,7 +1,6 @@
 package goredisSentinelstore
 
 type RedisConf struct {
-	Network    string
 	Password   string
 	DB         int
 	TimeOut    int
