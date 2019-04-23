@@ -45,8 +45,12 @@ func RedisInit(c *RedisConf) *redis.Pool {
 			}
 			return c, nil
 		},
-		TestOnBorrow: func(c redis.Conn, t time.Time) error {
-			if !sentinel.TestRole(c, "master") {
+		TestOnBorrow: func(rc redis.Conn, t time.Time) error {
+			if !Auth(rc, c.Password) {
+				return errors.New("Auth failed")
+			}
+
+			if !sentinel.TestRole(rc, "master") {
 				return errors.New("Role check failed")
 			} else {
 				return nil
@@ -54,4 +58,12 @@ func RedisInit(c *RedisConf) *redis.Pool {
 		},
 	}
 	return MySentinel
+}
+
+func Auth(c redis.Conn, password string) bool {
+	result, err := redis.Bool(c.Do("AUTH", password))
+	if err != nil || !result {
+		return false
+	}
+	return true
 }
