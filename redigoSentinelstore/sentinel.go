@@ -36,20 +36,26 @@ func RedisInit(c *RedisConf) *redis.Pool {
 			if err != nil {
 				return nil, err
 			}
-			c, err := redis.Dial("tcp", masterAddr,
-				redis.DialConnectTimeout(time.Millisecond*time.Duration(c.TimeOut)),
-				redis.DialReadTimeout(time.Millisecond*time.Duration(c.TimeOut)),
-				redis.DialWriteTimeout(time.Millisecond*time.Duration(c.TimeOut)))
+			var rc redis.Conn
+			if c.Password != "" {
+				rc, err = redis.Dial("tcp", masterAddr,
+					redis.DialConnectTimeout(time.Millisecond*time.Duration(c.TimeOut)),
+					redis.DialReadTimeout(time.Millisecond*time.Duration(c.TimeOut)),
+					redis.DialWriteTimeout(time.Millisecond*time.Duration(c.TimeOut)),
+					redis.DialPassword(c.Password))
+			} else {
+				rc, err = redis.Dial("tcp", masterAddr,
+					redis.DialConnectTimeout(time.Millisecond*time.Duration(c.TimeOut)),
+					redis.DialReadTimeout(time.Millisecond*time.Duration(c.TimeOut)),
+					redis.DialWriteTimeout(time.Millisecond*time.Duration(c.TimeOut)))
+			}
+
 			if err != nil {
 				return nil, err
 			}
-			return c, nil
+			return rc, nil
 		},
 		TestOnBorrow: func(rc redis.Conn, t time.Time) error {
-			if !Auth(rc, c.Password) {
-				return errors.New("Auth failed")
-			}
-
 			if !sentinel.TestRole(rc, "master") {
 				return errors.New("Role check failed")
 			} else {
@@ -58,12 +64,4 @@ func RedisInit(c *RedisConf) *redis.Pool {
 		},
 	}
 	return MySentinel
-}
-
-func Auth(c redis.Conn, password string) bool {
-	result, err := redis.Bool(c.Do("AUTH", password))
-	if err != nil || !result {
-		return false
-	}
-	return true
 }
