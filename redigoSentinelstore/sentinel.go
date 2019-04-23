@@ -67,7 +67,7 @@ func RedisInit(c *RedisConf) (*redis.Pool, error) {
 	defer conn.Close()
 	r, err := redis.String(conn.Do("PING"))
 	if err != nil || r != "PONG" {
-		return nil, err
+		return nil, errors.New("PING check failed")
 	}
 	return MySentinel, nil
 }
