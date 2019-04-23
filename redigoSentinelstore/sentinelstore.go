@@ -211,6 +211,7 @@ func (s *SentinleStore) Save(r *http.Request, w http.ResponseWriter, session *se
 // 删除session信息
 func (s *SentinleStore) Delete(r *http.Request, w http.ResponseWriter, session *sessions.Session) error {
 	c := s.Sentinel.Get()
+	defer c.Close()
 	if _, err := c.Do("DEL", s.keyPrefix+session.ID); err != nil {
 		return err
 	}
@@ -239,6 +240,7 @@ func (s *SentinleStore) save(session *sessions.Session) error {
 		age = s.DefaultMaxAge
 	}
 	c := s.Sentinel.Get()
+	defer c.Close()
 	_, err = c.Do("SETEX", s.keyPrefix+session.ID, strconv.Itoa(age), string(b))
 	return err
 }
@@ -246,6 +248,7 @@ func (s *SentinleStore) save(session *sessions.Session) error {
 // load 获取到的session信息
 func (s *SentinleStore) load(session *sessions.Session) (bool, error) {
 	c := s.Sentinel.Get()
+	defer c.Close()
 	if r, err := redis.Bytes(c.Do("GET", s.keyPrefix+session.ID)); err != nil {
 		return false, err
 	} else {
@@ -257,6 +260,7 @@ func (s *SentinleStore) load(session *sessions.Session) (bool, error) {
 // 删除redis上的session key
 func (s *SentinleStore) delete(session *sessions.Session) error {
 	c := s.Sentinel.Get()
+	defer c.Close()
 	if _, err := c.Do("DEL", s.keyPrefix+session.ID); err != nil {
 		return err
 	} else {
