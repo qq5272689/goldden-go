@@ -1,4 +1,4 @@
-package sentinelstore
+package redigoSentinelstore
 
 import (
 	log "github.com/sirupsen/logrus"

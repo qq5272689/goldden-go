@@ -1,4 +1,4 @@
-package sentinelstore
+package redigoSentinelstore
 
 type RedisConf struct {
 	Network    string

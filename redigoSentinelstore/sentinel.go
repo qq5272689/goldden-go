@@ -1,4 +1,4 @@
-package redigoSentinel
+package redigoSentinelstore
 
 import (
 	"errors"
@@ -6,16 +6,6 @@ import (
 	"github.com/gomodule/redigo/redis"
 	"time"
 )
-
-type RedisConf struct {
-	Network    string
-	Password   string
-	DB         int
-	TimeOut    int
-	Pool       int
-	MasterName string
-	Sentinels  []string
-}
 
 var MySentinel *redis.Pool
 var MyRedisConf *RedisConf

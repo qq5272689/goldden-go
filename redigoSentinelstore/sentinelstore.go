@@ -1,4 +1,4 @@
-package sentinelstore
+package redigoSentinelstore
 
 import (
 	"bytes"
