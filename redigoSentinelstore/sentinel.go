@@ -10,7 +10,7 @@ import (
 var MySentinel *redis.Pool
 var MyRedisConf *RedisConf
 
-func RedisInit(c *RedisConf) *redis.Pool {
+func RedisInit(c *RedisConf) (*redis.Pool, error) {
 	sntnl := &sentinel.Sentinel{
 		Addrs:      c.Sentinels,
 		MasterName: c.MasterName,
@@ -63,5 +63,11 @@ func RedisInit(c *RedisConf) *redis.Pool {
 			}
 		},
 	}
-	return MySentinel
+	conn := MySentinel.Get()
+	defer conn.Close()
+	r, err := redis.String(conn.Do("PING"))
+	if err != nil || r != "PONG" {
+		return nil, err
+	}
+	return MySentinel, nil
 }
