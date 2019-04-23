@@ -1,18 +1,18 @@
 package goredisSentinelstore
 
 import (
+	"github.com/go-redis/redis"
 	nSessions "github.com/goincremental/negroni-sessions"
-	"github.com/gomodule/redigo/redis"
 	gSessions "github.com/gorilla/sessions"
 )
 
 //New returns a new Sentinel store
-func NewNegroniSentinelGobStore(Sentinel *redis.Pool, sessionExpire int, keyPairs ...[]byte) nSessions.Store {
+func NewNegroniSentinelGobStore(Sentinel *redis.Client, sessionExpire int, keyPairs ...[]byte) nSessions.Store {
 	store := NewSentinelGobStore(Sentinel, sessionExpire, keyPairs...)
 	return &NegroniSentinleStore{store}
 }
 
-func NewNegroniSentinelJsonStore(Sentinel *redis.Pool, sessionExpire int, keyPairs ...[]byte) nSessions.Store {
+func NewNegroniSentinelJsonStore(Sentinel *redis.Client, sessionExpire int, keyPairs ...[]byte) nSessions.Store {
 	store := NewSentinelJsonStore(Sentinel, sessionExpire, keyPairs...)
 	return &NegroniSentinleStore{store}
 }
