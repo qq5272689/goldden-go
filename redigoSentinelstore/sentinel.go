@@ -42,12 +42,12 @@ func RedisInit(c *RedisConf) (*redis.Pool, error) {
 					redis.DialConnectTimeout(time.Millisecond*time.Duration(c.TimeOut)),
 					redis.DialReadTimeout(time.Millisecond*time.Duration(c.TimeOut)),
 					redis.DialWriteTimeout(time.Millisecond*time.Duration(c.TimeOut)),
-					redis.DialPassword(c.Password))
+					redis.DialPassword(c.Password), redis.DialDatabase(c.DB))
 			} else {
 				rc, err = redis.Dial("tcp", masterAddr,
 					redis.DialConnectTimeout(time.Millisecond*time.Duration(c.TimeOut)),
 					redis.DialReadTimeout(time.Millisecond*time.Duration(c.TimeOut)),
-					redis.DialWriteTimeout(time.Millisecond*time.Duration(c.TimeOut)))
+					redis.DialWriteTimeout(time.Millisecond*time.Duration(c.TimeOut)), redis.DialDatabase(c.DB))
 			}
 
 			if err != nil {
