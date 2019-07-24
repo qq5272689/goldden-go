@@ -1,4 +1,4 @@
-package main
+package goutils
 
 import (
 	"github.com/qq5272689/goutils/logrus-hooks/TimedRotatingFileHook"
