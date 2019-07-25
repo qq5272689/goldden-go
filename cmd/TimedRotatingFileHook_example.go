@@ -1,6 +1,7 @@
-package goutils
+package main
 
 import (
+	"fmt"
 	"github.com/qq5272689/goutils/logrus-hooks/TimedRotatingFileHook"
 	"github.com/sirupsen/logrus"
 	"os"
@@ -9,7 +10,10 @@ import (
 
 func main() {
 	log := logrus.New()
+	fmt.Println("start")
+	log.Warnln("start")
 	hook, err := TimedRotatingFileHook.NewTRFileHook("/tmp/logs", "test.log", "M")
+	hook.SetFilePrefix("/home/hj/gopaths/goutils_gopath/src/goutils")
 	defer hook.CloseWrites()
 	if err != nil {
 		log.Fatalln(err)
