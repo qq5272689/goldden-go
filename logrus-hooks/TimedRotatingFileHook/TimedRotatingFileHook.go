@@ -136,7 +136,7 @@ func (h *TRFileHook) Fire(entry *logrus.Entry) error {
 
 func (h *TRFileHook) newwrite() (err error) {
 	if fi, err := os.Stat(h.FilePath); err != nil {
-		if err = os.Mkdir(h.FilePath, os.ModePerm); err != nil {
+		if err = os.MkdirAll(h.FilePath, os.ModePerm); err != nil {
 			return errors.New("目录:" + h.FilePath + "创建失败！！！")
 		}
 	} else {
