@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/sirupsen/logrus"
 	"os"
+	"path"
 	"path/filepath"
 	"runtime"
 	"strings"
@@ -60,6 +61,24 @@ func (e NewWriterErr) Error() string {
 
 func NewTRFileHook(logdir, filename, when string) (*TRFileHook, error) {
 	h := &TRFileHook{}
+	h.FilePath = logdir
+	h.FileName = filename
+	h.FileErrName = filename + "-err"
+	h.When = when
+	h.NowTime = time.Now()
+	if err := h.newwrite(); err != nil {
+		return h, err
+	}
+	h.mu = new(sync.Mutex)
+	return h, nil
+}
+
+func NewTRFileHookHostname(logdir, filename, when string) (*TRFileHook, error) {
+	h := &TRFileHook{}
+	hostname,err:=os.Hostname()
+	if err==nil{
+		logdir = path.Join(logdir,hostname)
+	}
 	h.FilePath = logdir
 	h.FileName = filename
 	h.FileErrName = filename + "-err"
