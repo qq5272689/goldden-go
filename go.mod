@@ -10,4 +10,6 @@ require (
 	github.com/gorilla/sessions v1.2.1
 	github.com/sirupsen/logrus v1.7.0
 	github.com/urfave/negroni v1.0.0
+	go.uber.org/multierr v1.6.0
+	go.uber.org/zap v1.16.0
 )

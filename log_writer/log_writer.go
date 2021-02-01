@@ -36,7 +36,7 @@ func (e FileIsDirErr) Error() string {
 
 func (lw *LogWriter) NewFile() (err error) {
 	lw.path, _ = filepath.Abs(lw.path)
-	fmt.Println("base paht", lw.path)
+	fmt.Println("base path", lw.path)
 	if fi, err := os.Stat(lw.path); err != nil {
 		if err = os.MkdirAll(lw.path, os.ModePerm); err != nil {
 			return errors.New("目录:" + lw.path + "创建失败！！！")
@@ -102,6 +102,10 @@ func (lw *LogWriter) Close() error {
 	}
 	lw.file = nil
 	return nil
+}
+
+func (lw *LogWriter) Sync() error {
+	return lw.Close()
 }
 
 func (lw *LogWriter) logstr(t time.Time) string {
