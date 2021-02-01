@@ -1,4 +1,4 @@
-package goredisSentinelstore
+package goredis_sentinel_store
 
 import (
 	"bytes"

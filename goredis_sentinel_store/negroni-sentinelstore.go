@@ -1,4 +1,4 @@
-package goredisSentinelstore
+package goredis_sentinel_store
 
 import (
 	"github.com/go-redis/redis/v8"
