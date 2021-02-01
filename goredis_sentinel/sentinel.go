@@ -1,4 +1,4 @@
-package goredisSentinel
+package goredis_sentinel
 
 import (
 	"context"
