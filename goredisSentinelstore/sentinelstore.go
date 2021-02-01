@@ -2,12 +2,13 @@ package goredisSentinelstore
 
 import (
 	"bytes"
+	"context"
 	"encoding/base32"
 	"encoding/gob"
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/go-redis/redis"
+	"github.com/go-redis/redis/v8"
 	"github.com/gorilla/securecookie"
 	"github.com/gorilla/sessions"
 	"net/http"
@@ -210,7 +211,7 @@ func (s *SentinleStore) Save(r *http.Request, w http.ResponseWriter, session *se
 
 // 删除session信息
 func (s *SentinleStore) Delete(r *http.Request, w http.ResponseWriter, session *sessions.Session) error {
-	if _, err := s.Sentinel.Del(s.keyPrefix + session.ID).Result(); err != nil {
+	if _, err := s.Sentinel.Del(context.Background(), s.keyPrefix+session.ID).Result(); err != nil {
 		return err
 	}
 	// 设置cookie过期
@@ -237,13 +238,13 @@ func (s *SentinleStore) save(session *sessions.Session) error {
 	if age == 0 {
 		age = s.DefaultMaxAge
 	}
-	_, err = s.Sentinel.Set(s.keyPrefix+session.ID, string(b), time.Second*time.Duration(age)).Result()
+	_, err = s.Sentinel.Set(context.Background(), s.keyPrefix+session.ID, string(b), time.Second*time.Duration(age)).Result()
 	return err
 }
 
 // load 获取到的session信息
 func (s *SentinleStore) load(session *sessions.Session) (bool, error) {
-	if r, err := s.Sentinel.Get(s.keyPrefix + session.ID).Bytes(); err != nil {
+	if r, err := s.Sentinel.Get(context.Background(), s.keyPrefix+session.ID).Bytes(); err != nil {
 		return false, err
 	} else {
 
@@ -253,7 +254,7 @@ func (s *SentinleStore) load(session *sessions.Session) (bool, error) {
 
 // 删除redis上的session key
 func (s *SentinleStore) delete(session *sessions.Session) error {
-	if _, err := s.Sentinel.Del(s.keyPrefix + session.ID).Result(); err != nil {
+	if _, err := s.Sentinel.Del(context.Background(), s.keyPrefix+session.ID).Result(); err != nil {
 		return err
 	} else {
 		return nil

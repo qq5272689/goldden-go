@@ -1,7 +1,7 @@
 package goredisSentinelstore
 
 import (
-	"github.com/go-redis/redis"
+	"github.com/go-redis/redis/v8"
 	nSessions "github.com/goincremental/negroni-sessions"
 	gSessions "github.com/gorilla/sessions"
 )

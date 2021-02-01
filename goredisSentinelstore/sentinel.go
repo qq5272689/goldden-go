@@ -1,8 +1,9 @@
 package goredisSentinelstore
 
 import (
+	"context"
 	"errors"
-	"github.com/go-redis/redis"
+	"github.com/go-redis/redis/v8"
 	"time"
 )
 
@@ -15,7 +16,7 @@ func RedisInit(rc *RedisConf) (*redis.Client, error) {
 		Password: rc.Password, DB: rc.DB, DialTimeout: timeout, ReadTimeout: timeout,
 		WriteTimeout: timeout, PoolTimeout: timeout, IdleTimeout: timeout * 1000, PoolSize: rc.Pool}
 	c := redis.NewFailoverClient(fo)
-	r, err := c.Ping().Result()
+	r, err := c.Ping(context.Background()).Result()
 	if r != "PONG" || err != nil {
 		return nil, errors.New("PING check failed")
 	}
