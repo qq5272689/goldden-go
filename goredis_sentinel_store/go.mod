@@ -1,4 +1,4 @@
-module github.com/qq5272689/goutils/goredis_sentinel_store/v1
+module github.com/qq5272689/goutils/goredis_sentinel_store
 
 go 1.15
 
