@@ -2,6 +2,7 @@ package gin_middleware
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/qq5272689/goutils/logger"
@@ -53,13 +54,14 @@ func GinZapRecovery(log *zap.Logger, jd JsonData) gin.HandlerFunc {
 						headers[idx] = current[0] + ": *"
 					}
 				}
-				logger.Error(err.(error).Error())
+				err2 := errors.New(fmt.Sprintf("%s", err))
+				logger.Error(err2.Error())
 
 				if brokenPipe {
-					c.Error(err.(error)) // nolint: errcheck
+					c.Error(err2) // nolint: errcheck
 					c.Abort()
 				} else {
-					c.AbortWithStatusJSON(http.StatusInternalServerError, jd.SetErr(err.(error)))
+					c.AbortWithStatusJSON(http.StatusInternalServerError, jd.SetErr(err2))
 					c.AbortWithStatus(http.StatusInternalServerError)
 				}
 			}
