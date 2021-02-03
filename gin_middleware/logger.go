@@ -4,10 +4,12 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/qq5272689/goutils/logger"
+	"go.uber.org/zap"
 	"time"
 )
 
-func GinZapLogger() gin.HandlerFunc {
+func GinZapLogger(log *zap.Logger) gin.HandlerFunc {
+	logger.SetLogger(log)
 	return func(c *gin.Context) {
 		start := time.Now()
 		path := c.Request.URL.Path
