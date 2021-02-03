@@ -17,7 +17,7 @@ func GetProdLogger(path, service, when string) (logger *zap.Logger, closer Close
 	}
 	hook, errLogger, err := zapLevelFileHook(path, service, when, zap.ErrorLevel)
 	//zap.AddCallerSkip(1),
-	logger = zap.New(core, zap.AddCaller(), zap.AddCallerSkip(1), zap.Development(), zap.Hooks(hook))
+	logger = zap.New(core, zap.AddCaller(), zap.AddCallerSkip(2), zap.Development(), zap.Hooks(hook))
 	return logger, func() error {
 		return multierr.Combine(errLogger.Sync(), logger.Sync())
 	}, nil
@@ -29,7 +29,7 @@ func GetDevLogger(path, service, when string) (logger *zap.Logger, closer Closer
 		return nil, nil, err
 	}
 	//zap.AddCallerSkip(1),
-	logger = zap.New(core, zap.AddCaller(), zap.Development())
+	logger = zap.New(core, zap.AddCaller(), zap.AddCallerSkip(2), zap.Development())
 	return logger, func() error {
 		return logger.Sync()
 	}, nil
@@ -82,7 +82,7 @@ func zapLevelFileHook(path, service, when string, level zapcore.Level) (hook fun
 	if err != nil {
 		return nil, nil, err
 	}
-	logger = zap.New(core, zap.AddCaller(), zap.AddCallerSkip(1), zap.Development())
+	logger = zap.New(core, zap.AddCaller(), zap.AddCallerSkip(3), zap.Development())
 	return func(entry zapcore.Entry) error {
 		if entry.Level < level {
 			return nil
