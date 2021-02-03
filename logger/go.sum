@@ -20,6 +20,8 @@ github.com/qq5272689/goutils/log_writer v1.0.1 h1:iwG/32G0TK6/Q0ZzpSswlRymoMmv+6
 github.com/qq5272689/goutils/log_writer v1.0.1/go.mod h1:8atCEWrooMf6c9enabsurqDVFwruqDEY39j4FQVwv7Q=
 github.com/qq5272689/goutils/zap_logger v1.0.1 h1:9bjOavLTt3B4BDj/d0YXVMTHEpfU2pB0a22TtRQweTA=
 github.com/qq5272689/goutils/zap_logger v1.0.1/go.mod h1:ORDzHMLjtiH79IbTdRZyWLxMp3dH3zDRoSalsl1eMFA=
+github.com/qq5272689/goutils/zap_logger v1.0.2 h1:DMiNKygqt+4aLavGqO/vzvQy+w4nleJ97y0hoa9z9O0=
+github.com/qq5272689/goutils/zap_logger v1.0.2/go.mod h1:ORDzHMLjtiH79IbTdRZyWLxMp3dH3zDRoSalsl1eMFA=
 github.com/rogpeppe/go-internal v1.3.0/go.mod h1:M8bDsm7K2OlrFYOpmOWEs/qY81heoFRclV5y23lUDJ4=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
