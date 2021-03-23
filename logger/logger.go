@@ -1,14 +1,14 @@
 package logger
 
 import (
-	"github.com/qq5272689/goutils/zap_logger"
+	zl "github.com/qq5272689/goutils/zap_logger"
 	"go.uber.org/zap"
 	"runtime/debug"
 	"sync"
 )
 
 var logger *zap.Logger
-var Closer zap_logger.Closer
+var Closer zl.Closer
 var mu = new(sync.Mutex)
 
 func init() {
@@ -26,15 +26,32 @@ func LoggerInit(env, dir, service, when string) {
 	logger.Sync()
 	var err error
 	if env == "dev" || env == "local" {
-		logger, Closer, err = zap_logger.GetDevLogger(dir, service, when)
+		logger, Closer, err = zl.GetDevLogger(dir, service, when)
 	} else {
-		logger, Closer, err = zap_logger.GetProdLogger(dir, service, when)
+		logger, Closer, err = zl.GetProdLogger(dir, service, when)
 	}
 	if err != nil {
 		l, _ := zap.NewDevelopment()
 		l.Sugar().Fatal("logger init fail!!!", zap.Error(err))
 	}
 	logger.Debug("logger init ok", zap.String("dir", dir))
+}
+
+func JsonLoggerInit(env string) {
+	mu.Lock()
+	defer mu.Unlock()
+	logger.Sync()
+	var err error
+	if env == "dev" || env == "local" {
+		logger, Closer, err = zl.GetDevJsonLogger()
+	} else {
+		logger, Closer, err = zl.GetDevJsonLogger()
+	}
+	if err != nil {
+		l, _ := zap.NewDevelopment()
+		l.Sugar().Fatal("logger init fail!!!", zap.Error(err))
+	}
+	logger.Debug("logger init ok")
 }
 
 func GetLogger() *zap.Logger {
