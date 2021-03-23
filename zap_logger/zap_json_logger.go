@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-func GetProdJsonLogger(path, service, when string) (logger *zap.Logger, closer Closer, err error) {
+func GetProdJsonLogger() (logger *zap.Logger, closer Closer, err error) {
 	core, err := buildZapJsonCore(false)
 	if err != nil {
 		return nil, nil, err
@@ -19,7 +19,7 @@ func GetProdJsonLogger(path, service, when string) (logger *zap.Logger, closer C
 	}, nil
 }
 
-func GetDevJsonLogger(path, service, when string) (logger *zap.Logger, closer Closer, err error) {
+func GetDevJsonLogger() (logger *zap.Logger, closer Closer, err error) {
 	core, err := buildZapJsonCore(true)
 	if err != nil {
 		return nil, nil, err
