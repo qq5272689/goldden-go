@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/qq5272689/goutils/logger"
+	"github.com/qq5272689/goldden-go/pkg/utils/logger"
 	"go.uber.org/zap"
 	"io/ioutil"
 	"net"

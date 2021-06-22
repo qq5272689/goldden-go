@@ -1,7 +1,7 @@
 package logger
 
 import (
-	zl "github.com/qq5272689/goutils/zap_logger"
+	zl "github.com/qq5272689/goldden-go/pkg/utils/zap_logger"
 	"go.uber.org/zap"
 	"runtime/debug"
 	"sync"

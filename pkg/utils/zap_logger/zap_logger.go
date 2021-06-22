@@ -1,7 +1,7 @@
 package zap_logger
 
 import (
-	"github.com/qq5272689/goutils/log_writer"
+	"github.com/qq5272689/goldden-go/pkg/utils/log_writer"
 	"go.uber.org/multierr"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
