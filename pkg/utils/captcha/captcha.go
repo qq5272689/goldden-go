@@ -9,12 +9,6 @@ import (
 	"go.uber.org/zap"
 )
 
-var MemCaptcha *base64Captcha.Captcha
-
-func init() {
-	MemCaptcha = base64Captcha.NewCaptcha(base64Captcha.DefaultDriverDigit, base64Captcha.DefaultMemStore)
-}
-
 type CookieStore struct {
 	Ctx *gin.Context
 }
@@ -81,9 +75,10 @@ func (cs *CookieStore) Verify(id, answer string, clear bool) bool {
 	return false
 }
 
-func GetStore(ctx *gin.Context) base64Captcha.Store {
+func GetCaptcha(ctx *gin.Context) *base64Captcha.Captcha {
+	store := base64Captcha.DefaultMemStore
 	if ctx != nil {
-		return &CookieStore{Ctx: ctx}
+		store = &CookieStore{Ctx: ctx}
 	}
-	return base64Captcha.DefaultMemStore
+	return base64Captcha.NewCaptcha(base64Captcha.DefaultDriverDigit, store)
 }

@@ -13,7 +13,8 @@ import (
 
 type UserService interface {
 	GetUser(id int) (d models.User, err error)
-	CheckPassword(id int, password string) (ok bool, err error)
+	GetUserWithName(name string) (d models.User, err error)
+	CheckPassword(name, password string) (ok bool, err error)
 	CreateUser(d *models.User) (err error)
 	UpdateUser(d *models.User) (err error)
 	DelUser(ids []int) (err error)
@@ -48,12 +49,20 @@ func (db *UserServiceDB) GetUser(id int) (d models.User, err error) {
 	return
 }
 
-func (db *UserServiceDB) CheckPassword(id int, password string) (ok bool, err error) {
-	logger.Debug("CheckPassword 接受到任务：", zap.Int("id", id))
+func (db *UserServiceDB) GetUserWithName(name string) (d models.User, err error) {
+	logger.Debug("GetUser 接受到任务：", zap.String("name", name))
+	tx := db.DB.Model(&d).
+		Where(" name=?", name)
+	err = tx.Last(&d).Error
+	return
+}
+
+func (db *UserServiceDB) CheckPassword(name, password string) (ok bool, err error) {
+	logger.Debug("CheckPassword 接受到任务：", zap.String("name", name))
 	d := &models.User{}
 	password = crypto.GetPassword(password)
 	tx := db.DB.Model(d).
-		Where(" id=? and password = ?", id, password)
+		Where(" name=? and password = ?", name, password)
 	err = tx.Last(d).Error
 	if err != nil {
 		return false, err

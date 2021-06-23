@@ -54,6 +54,22 @@ func CommonFailResponse(c *gin.Context, err string) {
 	c.JSON(http.StatusInternalServerError, CommonFailResult(err))
 }
 
+func CommonErrorResponse(c *gin.Context, err error) {
+	c.JSON(http.StatusInternalServerError, CommonErrResult(err))
+}
+
+func CommonFailCodeResponse(c *gin.Context, code int, err string) {
+	r := CommonFailResult(err)
+	r.Code = code
+	c.JSON(http.StatusInternalServerError, CommonFailResult(err))
+}
+
+func CommonErrorCodeResponse(c *gin.Context, code int, err error) {
+	r := CommonErrResult(err)
+	r.Code = code
+	c.JSON(http.StatusInternalServerError, CommonErrResult(err))
+}
+
 func NewTableData(data interface{}, pageNo, pageSize, count int) (td *types.TableData) {
 	td = &types.TableData{
 		Data:       data,

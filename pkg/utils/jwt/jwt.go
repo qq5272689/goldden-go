@@ -31,8 +31,8 @@ type GolddenJwt struct {
 
 func (gj *GolddenJwt) GinJwtMiddleware(ctx *gin.Context) {
 	ctx.Set("goldden_jwt", gj)
-	claims := &jwtgo.MapClaims{}
-	token, err := request.ParseFromRequest(ctx.Request, request.AuthorizationHeaderExtractor, gj.keyFunc, request.WithClaims(claims))
+	claims := jwtgo.MapClaims{}
+	token, err := request.ParseFromRequest(ctx.Request, request.AuthorizationHeaderExtractor, gj.keyFunc, request.WithClaims(&claims))
 	if err == nil && token.Valid {
 		ctx.Set("goldden_claims", claims)
 		return
@@ -75,14 +75,14 @@ func (gj *GolddenJwt) keyFunc(token *jwtgo.Token) (interface{}, error) {
 // getSubFromToken 获取Token的主题（也可以更改获取其他值）
 // 参数tokenStr指的是 从客户端传来的待验证Token
 // 验证Token过程中，如果Token生成过程中，指定了iat与exp参数值，将会自动根据时间戳进行时间验证
-func (gj *GolddenJwt) GetClaimsFromToken(tokenStr string) (claims *jwtgo.MapClaims, err error) {
+func (gj *GolddenJwt) GetClaimsFromToken(tokenStr string) (claims jwtgo.MapClaims, err error) {
 	// 基于公钥验证Token合法性
 	token, err := jwtgo.Parse(tokenStr, gj.keyFunc)
 	if err != nil {
 		return nil, err
 	}
 	if claims, ok := token.Claims.(jwtgo.MapClaims); ok && token.Valid {
-		return &claims, nil
+		return claims, nil
 	}
 	return nil, errors.New("Token无效或者无对应值")
 }
