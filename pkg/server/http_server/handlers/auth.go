@@ -12,12 +12,6 @@ import (
 	"go.uber.org/zap"
 )
 
-type LoginData struct {
-	Name     string `json:"name"`
-	Password string `json:"password"`
-	Verify   string `json:"verify"`
-}
-
 // @Tags user API
 // ShowAccount godoc
 // @Summary 获取验证码
@@ -34,6 +28,12 @@ func Verify(ctx *gin.Context) {
 	}
 	ctx.SetCookie("captchaid", id, 60, "", "", false, false)
 	ghttp.CommonSuccessResponse(ctx, bs)
+}
+
+type LoginData struct {
+	Name     string `json:"name"`
+	Password string `json:"password"`
+	Verify   string `json:"verify"`
 }
 
 // @Tags 用户相关接口
@@ -87,6 +87,23 @@ func LoginLocal(ctx *gin.Context) {
 	mapstructure.Decode(u, &claims)
 	tokenStr, _ := goldden_jwt.CreateToken(claims)
 	ghttp.CommonSuccessResponse(ctx, tokenStr)
+}
+
+// @Tags user API
+// ShowAccount godoc
+// @Summary 获取用户信息
+// @Description 获取用户信息
+// @Produce  json
+// @Router /v1/userinfo [get]
+// @Success 200 {object} response.HttpResult
+func UserInfo(ctx *gin.Context) {
+	goldden_claims, ok := ctx.MustGet("goldden_claims").(jwtgo.MapClaims)
+	if !ok {
+		logger.Warn("获取用户信息失败!!!")
+		ghttp.CommonFailCodeResponse(ctx, 50000, "获取用户信息失败!!!")
+		return
+	}
+	ghttp.CommonSuccessResponse(ctx, goldden_claims)
 }
 
 // @Tags user API

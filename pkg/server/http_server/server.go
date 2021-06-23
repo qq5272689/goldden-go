@@ -40,7 +40,8 @@ func (hs *HttpServer) Server() *gin.Engine {
 // @description GOLDDEN-GO接口
 // @BasePath "/api"
 func (hs *HttpServer) router() {
-	v1 := hs.g.Group("/api/v1")
+	basePath := hs.g.Group("/api")
+	v1 := basePath.Group("/v1")
 	//用户相关
 	v1.GET("/user/:userid", handlers.GetUser)
 	v1.GET("/user", handlers.SearchUser)
@@ -52,6 +53,7 @@ func (hs *HttpServer) router() {
 	v1.GET("/verify", handlers.Verify)
 	v1.GET("/logout", handlers.LogOut)
 	v1.GET("/login/local", handlers.LoginLocal)
+	v1.GET("/userinfo", handlers.UserInfo)
 }
 
 func (hs *HttpServer) listenAndServe() {

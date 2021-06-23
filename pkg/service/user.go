@@ -34,13 +34,6 @@ func GetUserServiceDBWithContext(c *gin.Context) UserService {
 	return &UserServiceDB{db.(*gorm.DB)}
 }
 
-type GetUserError struct {
-}
-
-func (cue GetUserError) Error() string {
-	return "GetUserError"
-}
-
 func (db *UserServiceDB) GetUser(id int) (d models.User, err error) {
 	logger.Debug("GetUser 接受到任务：", zap.Int("id", id))
 	tx := db.DB.Model(&d).
