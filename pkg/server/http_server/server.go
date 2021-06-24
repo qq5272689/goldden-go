@@ -7,7 +7,6 @@ import (
 	"github.com/qq5272689/goldden-go/pkg/utils/gin_middleware"
 	ghttp "github.com/qq5272689/goldden-go/pkg/utils/http"
 	"github.com/qq5272689/goldden-go/pkg/utils/logger"
-	"github.com/spf13/viper"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"go.uber.org/zap"
@@ -28,7 +27,14 @@ func (ger ginZapRecoveryErrResponse) SetErr(err error) interface{} {
 type HttpServer struct {
 	g *gin.Engine
 	//viper.GetString("listen")
-	Addr string
+	//env := viper.GetString("env")
+	Env         string
+	Addr        string
+	middlewares []gin.HandlerFunc
+}
+
+func NewHttpServer(env, addr string) *HttpServer {
+	return &HttpServer{g: gin.New(), Env: env, Addr: addr}
 }
 
 func (hs *HttpServer) Server() *gin.Engine {
@@ -93,10 +99,15 @@ func (hs *HttpServer) listenAndServe() {
 	//return http.ListenAndServe(hs.Addr, hs.g)
 }
 
+func (hs *HttpServer) AddMiddleware(ms ...gin.HandlerFunc) {
+	hs.middlewares = append(hs.middlewares, ms...)
+}
+
 func (hs *HttpServer) ListenAndServe() {
 	hs.g.Use(gin_middleware.GinZapLogger(logger.GetLogger()), gin_middleware.GinZapRecovery(logger.GetLogger(), ginZapRecoveryErrResponse{}))
-	env := viper.GetString("env")
-	if env == "dev" || env == "local" {
+	hs.g.Use(hs.middlewares...)
+
+	if hs.Env == "dev" || hs.Env == "local" {
 		hs.g.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	}
 	hs.router()

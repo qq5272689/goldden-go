@@ -18,6 +18,7 @@ type UserService interface {
 	CreateUser(d *models.User) (err error)
 	UpdateUser(d *models.User) (err error)
 	DelUser(ids []int) (err error)
+	InitSuperAdmin() (err error)
 	SearchUser(filter string, pageNo, pageSize int) (td *types.TableData, err error)
 }
 
@@ -32,6 +33,20 @@ func GetUserServiceDB(db *gorm.DB) UserService {
 func GetUserServiceDBWithContext(c *gin.Context) UserService {
 	db, _ := c.Get("DB")
 	return &UserServiceDB{db.(*gorm.DB)}
+}
+
+func (db *UserServiceDB) InitSuperAdmin() (err error) {
+	logger.Debug("InitSuperAdmin 接受到任务")
+	admin, _ := db.GetUserWithName("admin")
+	if admin.Name == "admin" {
+		return nil
+	}
+	return db.CreateUser(&models.User{
+		Name:        "admin",
+		DisplayName: "Admin",
+		Password:    "Gold@admin123",
+		SuperAdmin:  true,
+	})
 }
 
 func (db *UserServiceDB) GetUser(id int) (d models.User, err error) {

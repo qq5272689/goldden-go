@@ -12,6 +12,10 @@ import (
 func init() {
 	// 16为密码加密
 	viper.SetDefault("golddengo.password.key", "KY9ciRr1Q7sOgjVV")
+	// mysql连接url
+	viper.SetDefault("mysql.dsn", "goldden_go:goldden_go123@tcp(192.168.8.154:12301)/goldden_go?charset=utf8&parseTime=True&loc=Local")
+	//监听地址
+	viper.SetDefault("listen", ":8080")
 }
 
 func InitConfig(cfgFile string) error {
