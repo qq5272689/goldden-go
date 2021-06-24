@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/mitchellh/mapstructure"
 	"github.com/qq5272689/goldden-go/pkg/service"
+	"github.com/qq5272689/goldden-go/pkg/utils/auth"
 	"github.com/qq5272689/goldden-go/pkg/utils/captcha"
 	ghttp "github.com/qq5272689/goldden-go/pkg/utils/http"
 	"github.com/qq5272689/goldden-go/pkg/utils/jwt"
@@ -30,22 +31,16 @@ func Verify(ctx *gin.Context) {
 	ghttp.CommonSuccessResponse(ctx, bs)
 }
 
-type LoginData struct {
-	Name     string `json:"name"`
-	Password string `json:"password"`
-	Verify   string `json:"verify"`
-}
-
 // @Tags 用户相关接口
 // ShowAccount godoc
 // @Summary 本地用户登录
 // @Description 本地用户登录
 // @Produce  json
-// @Param data body LoginData  true "登录信息"
+// @Param data body auth.LoginData  true "登录信息"
 // @Router /login/local [post]
 // @Success 200 {object} response.HttpResult
 func LoginLocal(ctx *gin.Context) {
-	ld := &LoginData{}
+	ld := &auth.LoginData{}
 	if err := ghttp.GetBody(ctx, ld); err != nil {
 		logger.Warn("调用服务 GetBody 错误!!!错误信息：", zap.Error(err))
 		ghttp.CommonErrorCodeResponse(ctx, 50000, err)
