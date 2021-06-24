@@ -31,7 +31,10 @@ func GetUserServiceDB(db *gorm.DB) UserService {
 }
 
 func GetUserServiceDBWithContext(c *gin.Context) UserService {
-	db, _ := c.Get("DB")
+	db, exists := c.Get("DB")
+	if !exists {
+		logger.Error("数据库接口不存在！！！")
+	}
 	return &UserServiceDB{db.(*gorm.DB)}
 }
 

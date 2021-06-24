@@ -14,7 +14,12 @@ type CookieStore struct {
 }
 
 func (cs *CookieStore) Set(id string, value string) {
-	gj, ok := cs.Ctx.MustGet("goldden_jwt").(*jwt.GolddenJwt)
+	goldden_jwt_I, exists := cs.Ctx.Get("goldden_jwt")
+	if !exists {
+		logger.Error("goldden_jwt doesn't exist")
+		return
+	}
+	gj, ok := goldden_jwt_I.(*jwt.GolddenJwt)
 	if !ok {
 		logger.Error("goldden_jwt doesn't exist")
 		return
@@ -33,7 +38,12 @@ func (cs *CookieStore) Get(id string, clear bool) string {
 		logger.Error("获取 goldden_captcha cookie失败", zap.Error(err))
 		return ""
 	}
-	gj, ok := cs.Ctx.MustGet("goldden_jwt").(*jwt.GolddenJwt)
+	goldden_jwt_I, exists := cs.Ctx.Get("goldden_jwt")
+	if !exists {
+		logger.Error("goldden_jwt doesn't exist")
+		return ""
+	}
+	gj, ok := goldden_jwt_I.(*jwt.GolddenJwt)
 	if !ok {
 		logger.Error("goldden_jwt doesn't exist")
 		return ""
@@ -58,7 +68,12 @@ func (cs *CookieStore) Get(id string, clear bool) string {
 		logger.Error("获取数据失败", zap.String("id", id))
 		return ""
 	}
-	value, ok := claims[id].(string)
+	value_I := claims[id]
+	if value_I == nil {
+		logger.Error("获取值失败", zap.String("id", id), zap.Any("value", claims[id]))
+		return ""
+	}
+	value, ok := value_I.(string)
 	if !ok {
 		logger.Error("获取值失败", zap.String("id", id), zap.Any("value", claims[id]))
 		return ""
@@ -78,6 +93,7 @@ func (cs *CookieStore) Verify(id, answer string, clear bool) bool {
 func GetCaptcha(ctx *gin.Context) *base64Captcha.Captcha {
 	store := base64Captcha.DefaultMemStore
 	if ctx != nil {
+		logger.Debug("cookiestore")
 		store = &CookieStore{Ctx: ctx}
 	}
 	return base64Captcha.NewCaptcha(base64Captcha.DefaultDriverDigit, store)

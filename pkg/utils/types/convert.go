@@ -1,6 +1,7 @@
 package types
 
 import (
+	"encoding/json"
 	"strconv"
 )
 
@@ -22,4 +23,12 @@ func SliceStringToInt(d []string) ([]int, error) {
 		a = append(a, si)
 	}
 	return a, nil
+}
+
+func JsonStruct(input interface{}, output interface{}) error {
+	ib, err := json.Marshal(input)
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(ib, output)
 }

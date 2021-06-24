@@ -4,6 +4,7 @@ import (
 	"github.com/qq5272689/goldden-go/pkg/db"
 	"github.com/qq5272689/goldden-go/pkg/server/http_server"
 	"github.com/qq5272689/goldden-go/pkg/service"
+	"github.com/qq5272689/goldden-go/pkg/utils/jwt"
 	"github.com/qq5272689/goldden-go/pkg/utils/logger"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
@@ -53,6 +54,10 @@ func serverInit(cmd *cobra.Command) (s *http_server.HttpServer, err error) {
 		return nil, err
 	}
 	s = http_server.NewHttpServer(viper.GetString("env"), viper.GetString("listen"))
-	s.AddMiddleware(db.GormMiddleware())
+	gj, err := jwt.NewGolddenJwt(viper.GetInt("jwt.exp"), viper.GetString("jwt.publicKey"), viper.GetString("jwt.privateKey"))
+	if err != nil {
+		return nil, err
+	}
+	s.AddMiddleware(gj.GinJwtMiddleware, db.GormMiddleware())
 	return
 }

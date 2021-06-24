@@ -114,7 +114,7 @@ func UpdateUser(ctx *gin.Context) {
 	}
 }
 
-// @Tags user API
+// @Tags 用户相关接口
 // ShowAccount godoc
 // @Summary 删除user
 // @Description 删除user

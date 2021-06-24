@@ -29,6 +29,19 @@ type GolddenJwt struct {
 //	privateKey, _ = jwtgo.ParseRSAPrivateKeyFromPEM(privateKeyByte)
 //}
 
+func NewGolddenJwt(exp int, puk, prk string) (gj *GolddenJwt, err error) {
+	gj = &GolddenJwt{Exp: exp}
+	gj.publicKey, err = jwtgo.ParseRSAPublicKeyFromPEM([]byte(puk))
+	if err != nil {
+		return nil, err
+	}
+	gj.privateKey, err = jwtgo.ParseRSAPrivateKeyFromPEM([]byte(prk))
+	if err != nil {
+		return nil, err
+	}
+	return gj, nil
+}
+
 func (gj *GolddenJwt) GinJwtMiddleware(ctx *gin.Context) {
 	ctx.Set("goldden_jwt", gj)
 	claims := jwtgo.MapClaims{}
@@ -39,7 +52,7 @@ func (gj *GolddenJwt) GinJwtMiddleware(ctx *gin.Context) {
 	}
 	goldden_key, _ := ctx.Cookie("goldden_key")
 	claims, err = gj.GetClaimsFromToken(goldden_key)
-	if err == nil && token.Valid {
+	if err == nil {
 		ctx.Set("goldden_claims", claims)
 		return
 	}
@@ -59,9 +72,20 @@ func (gj *GolddenJwt) CreateToken(claims jwtgo.MapClaims) (tokenStr string, err 
 	//}
 	now := time.Now()
 	claims["iat"] = now.Unix()
-	claims["exp"] = now.Add(time.Hour * time.Duration(gj.Exp)).Unix()
+	claims["exp"] = now.Add(time.Minute * time.Duration(gj.Exp)).Unix()
 	token := jwtgo.NewWithClaims(jwtgo.SigningMethodRS512, claims)
-	return token.SignedString(gj.publicKey)
+	return token.SignedString(gj.privateKey)
+}
+
+// createToken 生成一个RS256验证的Token
+// Token里面包括的值，可以自己根据情况添加，
+func (gj *GolddenJwt) CreateTokenAndSetCookie(claims jwtgo.MapClaims, ctx *gin.Context) (tokenStr string, err error) {
+	tokenStr, err = gj.CreateToken(claims)
+	if err != nil {
+		return
+	}
+	ctx.SetCookie("goldden_key", tokenStr, gj.Exp*60, "", "", false, true)
+	return
 }
 
 func (gj *GolddenJwt) keyFunc(token *jwtgo.Token) (interface{}, error) {
@@ -69,7 +93,7 @@ func (gj *GolddenJwt) keyFunc(token *jwtgo.Token) (interface{}, error) {
 	if _, ok := token.Method.(*jwtgo.SigningMethodRSA); !ok {
 		return nil, errors.New("验证Token的加密类型错误")
 	}
-	return gj.privateKey, nil
+	return gj.publicKey, nil
 }
 
 // getSubFromToken 获取Token的主题（也可以更改获取其他值）

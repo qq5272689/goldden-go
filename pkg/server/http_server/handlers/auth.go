@@ -3,17 +3,17 @@ package handlers
 import (
 	jwtgo "github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
-	"github.com/mitchellh/mapstructure"
 	"github.com/qq5272689/goldden-go/pkg/service"
 	"github.com/qq5272689/goldden-go/pkg/utils/auth"
 	"github.com/qq5272689/goldden-go/pkg/utils/captcha"
 	ghttp "github.com/qq5272689/goldden-go/pkg/utils/http"
 	"github.com/qq5272689/goldden-go/pkg/utils/jwt"
 	"github.com/qq5272689/goldden-go/pkg/utils/logger"
+	"github.com/qq5272689/goldden-go/pkg/utils/types"
 	"go.uber.org/zap"
 )
 
-// @Tags user API
+// @Tags 登录相关接口
 // ShowAccount godoc
 // @Summary 获取验证码
 // @Description 获取验证码
@@ -31,13 +31,13 @@ func Verify(ctx *gin.Context) {
 	ghttp.CommonSuccessResponse(ctx, bs)
 }
 
-// @Tags 用户相关接口
+// @Tags 登录相关接口
 // ShowAccount godoc
 // @Summary 本地用户登录
 // @Description 本地用户登录
 // @Produce  json
 // @Param data body auth.LoginData  true "登录信息"
-// @Router /login/local [post]
+// @Router /v1/login/local [post]
 // @Success 200 {object} ghttp.HttpResult
 func LoginLocal(ctx *gin.Context) {
 	ld := &auth.LoginData{}
@@ -72,36 +72,49 @@ func LoginLocal(ctx *gin.Context) {
 		return
 	}
 	u.Password = ""
-	goldden_jwt, ok := ctx.MustGet("goldden_jwt").(*jwt.GolddenJwt)
-	if !ok {
-		logger.Warn("获取JWT失败!!!")
+	goldden_jwt_I, exists := ctx.Get("goldden_jwt")
+	if !exists {
+		logger.Warn("获取用户信息失败!!!")
 		ghttp.CommonFailCodeResponse(ctx, 50005, "获取JWT失败!!!")
 		return
 	}
+	goldden_jwt, ok := goldden_jwt_I.(*jwt.GolddenJwt)
+	if !ok {
+		logger.Warn("获取JWT失败!!!")
+		ghttp.CommonFailCodeResponse(ctx, 50006, "获取JWT失败!!!")
+		return
+	}
 	claims := jwtgo.MapClaims{}
-	mapstructure.Decode(u, &claims)
-	tokenStr, _ := goldden_jwt.CreateToken(claims)
+	types.JsonStruct(u, &claims)
+	tokenStr, _ := goldden_jwt.CreateTokenAndSetCookie(claims, ctx)
+
 	ghttp.CommonSuccessResponse(ctx, tokenStr)
 }
 
-// @Tags user API
+// @Tags 登录相关接口
 // ShowAccount godoc
-// @Summary 获取用户信息
-// @Description 获取用户信息
+// @Summary 获取登录用户信息
+// @Description 获取登录用户信息
 // @Produce  json
 // @Router /v1/userinfo [get]
 // @Success 200 {object} ghttp.HttpResult
 func UserInfo(ctx *gin.Context) {
-	goldden_claims, ok := ctx.MustGet("goldden_claims").(jwtgo.MapClaims)
-	if !ok {
+	goldden_claims_I, exists := ctx.Get("goldden_claims")
+	if !exists {
 		logger.Warn("获取用户信息失败!!!")
 		ghttp.CommonFailCodeResponse(ctx, 50000, "获取用户信息失败!!!")
+		return
+	}
+	goldden_claims, ok := goldden_claims_I.(jwtgo.MapClaims)
+	if !ok {
+		logger.Warn("获取用户信息失败!!!")
+		ghttp.CommonFailCodeResponse(ctx, 50001, "获取用户信息失败!!!")
 		return
 	}
 	ghttp.CommonSuccessResponse(ctx, goldden_claims)
 }
 
-// @Tags user API
+// @Tags 登录相关接口
 // ShowAccount godoc
 // @Summary 登出
 // @Description 登出

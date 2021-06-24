@@ -3,6 +3,7 @@ package http_server
 import (
 	"context"
 	"github.com/gin-gonic/gin"
+	"github.com/qq5272689/goldden-go/docs"
 	"github.com/qq5272689/goldden-go/pkg/server/http_server/handlers"
 	"github.com/qq5272689/goldden-go/pkg/utils/gin_middleware"
 	ghttp "github.com/qq5272689/goldden-go/pkg/utils/http"
@@ -44,8 +45,8 @@ func (hs *HttpServer) Server() *gin.Engine {
 // @title GOLDDEN-GO接口
 // @version 1.0
 // @description GOLDDEN-GO接口
-// @BasePath "/api"
 func (hs *HttpServer) router() {
+	docs.SwaggerInfo.BasePath = "/api"
 	basePath := hs.g.Group("/api")
 	v1 := basePath.Group("/v1")
 	//用户相关
@@ -58,7 +59,7 @@ func (hs *HttpServer) router() {
 	//登录相关
 	v1.GET("/verify", handlers.Verify)
 	v1.GET("/logout", handlers.LogOut)
-	v1.GET("/login/local", handlers.LoginLocal)
+	v1.POST("/login/local", handlers.LoginLocal)
 	v1.GET("/userinfo", handlers.UserInfo)
 }
 
