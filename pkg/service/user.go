@@ -93,6 +93,7 @@ func (db *UserServiceDB) UpdateUser(d *models.User) (err error) {
 	if d.Password != "" {
 		d.Password = crypto.GetPassword(d.Password)
 	}
+	d.Name = ""
 	return db.DB.Model(&models.User{ID: d.ID}).Updates(d).Error
 }
 
