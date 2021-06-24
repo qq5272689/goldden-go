@@ -21,7 +21,7 @@ import (
 // @Param pageNo query []int  false "多个ID 每个ID之间用,分隔，例：123,233 注：跟 name 参数只有一个会生效，hostids参数优先级"
 // @Param pageSize query int  false "单页条数"
 // @Router /v1/user [get]
-// @Success 200 {object} response.HttpResult
+// @Success 200 {object} ghttp.HttpResult
 func SearchUser(ctx *gin.Context) {
 	filter := ctx.Query("filter")
 	pageNo, err := strconv.Atoi(ctx.Query("pageNo"))
@@ -54,7 +54,7 @@ func SearchUser(ctx *gin.Context) {
 // @Produce  json
 // @Param userid path int  false "用户ID"
 // @Router /v1/user/{userid} [get]
-// @Success 200 {object} response.HttpResult
+// @Success 200 {object} ghttp.HttpResult
 func GetUser(ctx *gin.Context) {
 	id, err := strconv.Atoi(ctx.Param("userid"))
 	if err != nil {
@@ -77,7 +77,7 @@ func GetUser(ctx *gin.Context) {
 // @Produce  json
 // @Param data body models.User  true "用户"
 // @Router /v1/user [post]
-// @Success 200 {object} response.HttpResult
+// @Success 200 {object} ghttp.HttpResult
 func CreateUser(ctx *gin.Context) {
 	args := &models.User{}
 	if err := ghttp.GetBody(ctx, args); err != nil {
@@ -100,7 +100,7 @@ func CreateUser(ctx *gin.Context) {
 // @Produce  json
 // @Param data body models.User  true "用户"
 // @Router /v1/user [put]
-// @Success 200 {object} response.HttpResult
+// @Success 200 {object} ghttp.HttpResult
 func UpdateUser(ctx *gin.Context) {
 	args := &models.User{}
 	if err := ghttp.GetBody(ctx, args); err != nil {
@@ -121,7 +121,7 @@ func UpdateUser(ctx *gin.Context) {
 // @Produce  json
 // @Param ids query []int  false "多个ID 每个ID之间用,分隔，例：123,233"
 // @Router /v1/user [delete]
-// @Success 200 {object} response.HttpResult
+// @Success 200 {object} ghttp.HttpResult
 func DeleteUser(ctx *gin.Context) {
 	id_str := ctx.QueryArray("ids")
 	ids, err := types.SliceStringToInt(id_str)

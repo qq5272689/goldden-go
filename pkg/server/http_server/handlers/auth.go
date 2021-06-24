@@ -19,7 +19,7 @@ import (
 // @Description 获取验证码
 // @Produce  json
 // @Router /v1/verify [get]
-// @Success 200 {object} response.HttpResult
+// @Success 200 {object} ghttp.HttpResult
 func Verify(ctx *gin.Context) {
 	id, bs, err := captcha.GetCaptcha(ctx).Generate()
 	if err != nil {
@@ -38,7 +38,7 @@ func Verify(ctx *gin.Context) {
 // @Produce  json
 // @Param data body auth.LoginData  true "登录信息"
 // @Router /login/local [post]
-// @Success 200 {object} response.HttpResult
+// @Success 200 {object} ghttp.HttpResult
 func LoginLocal(ctx *gin.Context) {
 	ld := &auth.LoginData{}
 	if err := ghttp.GetBody(ctx, ld); err != nil {
@@ -90,7 +90,7 @@ func LoginLocal(ctx *gin.Context) {
 // @Description 获取用户信息
 // @Produce  json
 // @Router /v1/userinfo [get]
-// @Success 200 {object} response.HttpResult
+// @Success 200 {object} ghttp.HttpResult
 func UserInfo(ctx *gin.Context) {
 	goldden_claims, ok := ctx.MustGet("goldden_claims").(jwtgo.MapClaims)
 	if !ok {
@@ -107,7 +107,7 @@ func UserInfo(ctx *gin.Context) {
 // @Description 登出
 // @Produce  json
 // @Router /v1/logout [get]
-// @Success 200 {object} response.HttpResult
+// @Success 200 {object} ghttp.HttpResult
 func LogOut(ctx *gin.Context) {
 	ctx.SetCookie("goldden_key", "", 0, "", "", false, false)
 	ghttp.CommonSuccessResponse(ctx, nil)
