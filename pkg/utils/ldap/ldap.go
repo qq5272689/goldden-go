@@ -275,7 +275,7 @@ func (server *Server) Login(query *auth.LoginData) (
 	*models.User, error,
 ) {
 	var err error
-	//var authAndBind bool
+	var authAndBind bool
 
 	// Check if we can use a search user
 	switch {
@@ -284,7 +284,7 @@ func (server *Server) Login(query *auth.LoginData) (
 			return nil, err
 		}
 	case server.shouldSingleBind():
-		//authAndBind = true
+		authAndBind = true
 		err = server.UserBind(
 			server.singleBindDN(query.Name),
 			query.Password,
@@ -312,17 +312,17 @@ func (server *Server) Login(query *auth.LoginData) (
 	}
 
 	user := users[0]
-	if err := server.validateGrafanaUser(user); err != nil {
+	if err := server.validateGolddenUser(user); err != nil {
 		return nil, err
 	}
 
-	//if !authAndBind {
-	//	// Authenticate user
-	//	err = server.UserBind(user.AuthId, query.Password)
-	//	if err != nil {
-	//		return nil, err
-	//	}
-	//}
+	if !authAndBind {
+		// Authenticate user
+		err = server.UserBind(user.Name, query.Password)
+		if err != nil {
+			return nil, err
+		}
+	}
 
 	return user, nil
 }
@@ -430,18 +430,18 @@ func (server *Server) users(logins []string) (
 	return result.Entries, nil
 }
 
-// validateGrafanaUser validates user access.
+// validateGolddenUser validates user access.
 // If there are no ldap group mappings access is true
 // otherwise a single group must match
-func (server *Server) validateGrafanaUser(user *models.User) error {
-	//if len(server.Config.Groups) > 0 && len(user.OrgRoles) < 1 {
-	//	logger.Error(
-	//		"User does not belong in any of the specified LDAP groups",
-	//		"username", user.Login,
-	//		"groups", user.Groups,
-	//	)
-	//	return ErrInvalidCredentials
-	//}
+func (server *Server) validateGolddenUser(user *models.User) error {
+	/*	if len(server.Config.Groups) > 0 && len(user.OrgRoles) < 1 {
+		logger.Error(
+			"User does not belong in any of the specified LDAP groups",
+			"username", user.Login,
+			"groups", user.Groups,
+		)
+		return ErrInvalidCredentials
+	}*/
 
 	return nil
 }
@@ -493,12 +493,12 @@ func (server *Server) getSearchRequest(
 	return searchRequest
 }
 
-// buildGrafanaUser extracts info from UserInfo model to ExternalUserInfo
-func (server *Server) buildGrafanaUser(user *goldap.Entry) (*models.User, error) {
-	//memberOf, err := server.getMemberOf(user)
-	//if err != nil {
-	//	return nil, err
-	//}
+// buildGolddenUser extracts info from UserInfo model to ExternalUserInfo
+func (server *Server) buildGolddenUser(user *goldap.Entry) (*models.User, error) {
+	/*	memberOf, err := server.getMemberOf(user)
+		if err != nil {
+			return nil, err
+		}*/
 
 	attrs := server.Config.Attr
 	extUser := &models.User{
@@ -513,29 +513,29 @@ func (server *Server) buildGrafanaUser(user *goldap.Entry) (*models.User, error)
 		),
 		//Login:    getAttribute(attrs.Username, user),
 		Email: getAttribute(attrs.Email, user),
-		//Groups:   memberOf,
-		//OrgRoles: map[int64]models.RoleType{},
+		/*		Groups:   memberOf,
+				OrgRoles: map[int64]models.RoleType{},*/
 	}
 
-	//for _, group := range server.Config.Groups {
-	//	// only use the first match for each org
-	//	if extUser.OrgRoles[group.OrgId] != "" {
-	//		continue
-	//	}
-	//
-	//	if isMemberOf(memberOf, group.GroupDN) {
-	//		extUser.OrgRoles[group.OrgId] = group.OrgRole
-	//		if extUser.IsGrafanaAdmin == nil || !*extUser.IsGrafanaAdmin {
-	//			extUser.IsGrafanaAdmin = group.IsGrafanaAdmin
-	//		}
-	//	}
-	//}
+	/*	for _, group := range server.Config.Groups {
+			// only use the first match for each org
+			if extUser.OrgRoles[group.OrgId] != "" {
+				continue
+			}
 
-	// If there are group org mappings configured, but no matching mappings,
-	// the user will not be able to login and will be disabled
-	//if len(server.Config.Groups) > 0 && len(extUser.OrgRoles) == 0 {
-	//	extUser.IsDisabled = true
-	//}
+			if isMemberOf(memberOf, group.GroupDN) {
+				extUser.OrgRoles[group.OrgId] = group.OrgRole
+				if extUser.IsGrafanaAdmin == nil || !*extUser.IsGrafanaAdmin {
+					extUser.IsGrafanaAdmin = group.IsGrafanaAdmin
+				}
+			}
+		}
+
+		// If there are group org mappings configured, but no matching mappings,
+		// the user will not be able to login and will be disabled
+		if len(server.Config.Groups) > 0 && len(extUser.OrgRoles) == 0 {
+			extUser.IsDisabled = true
+		}*/
 
 	return extUser, nil
 }
@@ -658,7 +658,7 @@ func (server *Server) serializeUsers(
 	var serialized []*models.User
 
 	for _, user := range entries {
-		extUser, err := server.buildGrafanaUser(user)
+		extUser, err := server.buildGolddenUser(user)
 		if err != nil {
 			return nil, err
 		}
