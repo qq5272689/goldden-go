@@ -66,12 +66,7 @@ func GetUser(ctx *gin.Context) {
 		logger.Warn("调用服务 SearchUser 错误!!!错误信息：", zap.Error(err))
 		ghttp.CommonFailResponse(ctx, err.Error())
 	} else {
-		if d, err := service.GetUserServiceDBWithContext(ctx).SearchUser("", 1, 1000); err != nil {
-			logger.Warn("调用服务 SearchUser 错误!!!错误信息：", zap.Error(err))
-			ghttp.CommonFailResponse(ctx, err.Error())
-		} else {
-			ghttp.CommonSuccessResponse(ctx, d)
-		}
+		ghttp.CommonSuccessResponse(ctx, d)
 	}
 }
 
@@ -120,7 +115,12 @@ func UpdateUser(ctx *gin.Context) {
 		logger.Warn("调用服务 SearchUser 错误!!!错误信息：", zap.Error(err))
 		ghttp.CommonFailResponse(ctx, err.Error())
 	} else {
-		ghttp.CommonSuccessResponse(ctx, nil)
+		if d, err := service.GetUserServiceDBWithContext(ctx).SearchUser("", 1, 1000); err != nil {
+			logger.Warn("调用服务 SearchUser 错误!!!错误信息：", zap.Error(err))
+			ghttp.CommonFailResponse(ctx, err.Error())
+		} else {
+			ghttp.CommonSuccessResponse(ctx, d)
+		}
 	}
 }
 
