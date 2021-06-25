@@ -6,6 +6,7 @@ type User struct {
 	Name         string `json:"name" gorm:"column:name"`                 //用户名
 	DisplayName  string `json:"display_name" gorm:"column:display_name"` //显示名称
 	Role         string `json:"role" gorm:"column:role"`                 //角色
+	Group        int    `json:"group" gorm:"column:group"`                 //group
 	Organization string `json:"organization" gorm:"column:organization"` //工作组织
 	Affiliation  string `json:"affiliation" gorm:"column:affiliation"`   //工作单位
 	Position     string `json:"position" gorm:"column:position"`         //职位
