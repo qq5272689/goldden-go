@@ -12,6 +12,7 @@ func GormMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx := context.Background()
 		c.Set("DB", DB.WithContext(ctx))
+		logger.Debug("设置数据库接口成功！！！")
 		goldden_claims_I, exists := c.Get("goldden_claims")
 		if !exists {
 			return
