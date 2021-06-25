@@ -3,13 +3,10 @@ package http_server
 import (
 	"context"
 	"github.com/gin-gonic/gin"
-	"github.com/qq5272689/goldden-go/docs"
 	"github.com/qq5272689/goldden-go/pkg/server/http_server/handlers"
 	"github.com/qq5272689/goldden-go/pkg/utils/gin_middleware"
 	ghttp "github.com/qq5272689/goldden-go/pkg/utils/http"
 	"github.com/qq5272689/goldden-go/pkg/utils/logger"
-	swaggerFiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
 	"go.uber.org/zap"
 	"net/http"
 	"os"
@@ -46,7 +43,6 @@ func (hs *HttpServer) Server() *gin.Engine {
 // @version 1.0
 // @description GOLDDEN-GO接口
 func (hs *HttpServer) router() {
-	docs.SwaggerInfo.BasePath = "/api/goldden-go"
 	basePath := hs.g.Group("/api/goldden-go")
 	v1 := basePath.Group("/v1")
 	//用户相关
@@ -116,10 +112,6 @@ func (hs *HttpServer) AddMiddleware(ms ...gin.HandlerFunc) {
 func (hs *HttpServer) ListenAndServe() error {
 	hs.g.Use(gin_middleware.GinZapLogger(logger.GetLogger()), gin_middleware.GinZapRecovery(logger.GetLogger(), ginZapRecoveryErrResponse{}))
 	hs.g.Use(hs.middlewares...)
-
-	if hs.Env == "dev" || hs.Env == "local" {
-		hs.g.GET("/swagger/goldden-go/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	}
 	hs.router()
 	return hs.listenAndServe()
 }
