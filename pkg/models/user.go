@@ -5,6 +5,7 @@ type User struct {
 	SuperAdmin   bool   `json:"super_admin" gorm:"column:super_admin"`   //是否是超级用户
 	Name         string `json:"name" gorm:"column:name"`                 //用户名
 	DisplayName  string `json:"display_name" gorm:"column:display_name"` //显示名称
+	Role         string `json:"role" gorm:"column:role"`                 //角色
 	Organization string `json:"organization" gorm:"column:organization"` //工作组织
 	Affiliation  string `json:"affiliation" gorm:"column:affiliation"`   //工作单位
 	Position     string `json:"position" gorm:"column:position"`         //职位

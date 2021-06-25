@@ -57,6 +57,7 @@ func (db *UserServiceDB) GetUser(id int) (d models.User, err error) {
 	tx := db.DB.Model(&d).
 		Where(" id=?", id)
 	err = tx.Last(&d).Error
+	d.Password = ""
 	return
 }
 
@@ -65,6 +66,7 @@ func (db *UserServiceDB) GetUserWithName(name string) (d models.User, err error)
 	tx := db.DB.Model(&d).
 		Where(" name=?", name)
 	err = tx.Last(&d).Error
+	d.Password = ""
 	return
 }
 
@@ -126,6 +128,8 @@ func (db *UserServiceDB) SearchUser(filter string, pageNo, pageSize int) (td *ty
 	if err = tx.Find(&ds).Error; err != nil {
 		return nil, err
 	}
-
+	for i := range ds {
+		ds[i].Password = ""
+	}
 	return http.NewTableData(ds, pageNo, pageSize, int(count)), nil
 }
