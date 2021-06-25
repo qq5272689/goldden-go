@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 	"path"
+	"strings"
 )
 
 func init() {
@@ -60,7 +61,7 @@ qdxS6V5MFi8tWrhRHCo0jGA=
 `)
 }
 
-func InitConfig(cfgFile string) error {
+func InitConfig(cfgFile, configNmae string) error {
 	if cfgFile != "" {
 		viper.SetConfigFile(cfgFile)
 	} else {
@@ -75,7 +76,12 @@ func InitConfig(cfgFile string) error {
 		viper.AddConfigPath(bd)
 		viper.AddConfigPath(path.Join(bd, "conf"))
 		viper.AddConfigPath(path.Join(bd, "etc"))
-		viper.SetConfigName("base-service")
+		if strings.TrimSpace(configNmae) == "" {
+			viper.SetConfigName("base-service")
+		} else {
+			viper.SetConfigName(configNmae)
+		}
+
 	}
 
 	viper.AutomaticEnv()

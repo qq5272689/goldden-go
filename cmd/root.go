@@ -28,7 +28,7 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(rootInit)
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/yxcontract.yaml)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/base-service.yaml)")
 	rootCmd.PersistentFlags().StringVar(&env, "env", "local", "env name (default is local")
 	viper.BindPFlag("env", rootCmd.PersistentFlags().Lookup("env"))
 }
@@ -36,7 +36,7 @@ func init() {
 func rootInit() {
 	logger.JsonLoggerInit(env)
 	logger.Debug("cfg:" + cfgFile)
-	if err := config.InitConfig(cfgFile); err != nil {
+	if err := config.InitConfig(cfgFile, "base-service"); err != nil {
 		logger.GetLogger().Fatal("InitConfig Fail!!!", zap.Error(err))
 	}
 	logger.Debug("config:", zap.Any("all", viper.ConfigFileUsed()))
