@@ -27,7 +27,7 @@ func OpenDB(serviceName, dsn string) (err error) {
 }
 
 func SetupDatabase(db *gorm.DB) error {
-	db.Exec("create extension IF NOT EXISTS hstore;")
+	//db.Exec("create extension IF NOT EXISTS hstore;")
 	//db.AutoMigrate(ModelNoHistory...)
 	err := db.AutoMigrate(ModelWithHistory...)
 	if err != nil {
