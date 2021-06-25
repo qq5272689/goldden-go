@@ -63,7 +63,7 @@ func (hs *HttpServer) router() {
 	v1.GET("/userinfo", handlers.UserInfo)
 }
 
-func (hs *HttpServer) listenAndServe() {
+func (hs *HttpServer) listenAndServe() error {
 	logger.Info("start listenAndServe", zap.String("listen addr", hs.Addr))
 	srv := &http.Server{
 		Addr:    hs.Addr,
@@ -71,40 +71,49 @@ func (hs *HttpServer) listenAndServe() {
 	}
 	// Initializing the server in a goroutine so that
 	// it won't block the graceful shutdown handling below
+	var err error
 	go func() {
-		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		if err = srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			logger.Error("listen fail", zap.Error(err))
 		}
 	}()
-
 	// Wait for interrupt signal to gracefully shutdown the server with
 	// a timeout of 5 seconds.
 	quit := make(chan os.Signal, 1)
-	// kill (no param) default send syscall.SIGTERM
-	// kill -2 is syscall.SIGINT
-	// kill -9 is syscall.SIGKILL but can't be catch, so don't need add it
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
-	<-quit
-	logger.Debug("Shutting down server...")
+	for {
+		select {
+		case <-quit:
+			// kill (no param) default send syscall.SIGTERM
+			// kill -2 is syscall.SIGINT
+			// kill -9 is syscall.SIGKILL but can't be catch, so don't need add it
+			logger.Debug("Shutting down server...")
 
-	// The context is used to inform the server it has 5 seconds to finish
-	// the request it is currently handling
-	context.Background()
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-	if err := srv.Shutdown(ctx); err != nil {
-		logger.Error("Server forced to shutdown ", zap.Error(err))
+			// The context is used to inform the server it has 5 seconds to finish
+			// the request it is currently handling
+			context.Background()
+			ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+			defer cancel()
+			if err := srv.Shutdown(ctx); err != nil {
+				logger.Error("Server forced to shutdown ", zap.Error(err))
+			}
+
+			logger.Debug("Server exiting")
+			//return http.ListenAndServe(hs.Addr, hs.g)
+		default:
+			if err != nil {
+				return err
+			}
+		}
 	}
 
-	logger.Debug("Server exiting")
-	//return http.ListenAndServe(hs.Addr, hs.g)
 }
 
 func (hs *HttpServer) AddMiddleware(ms ...gin.HandlerFunc) {
 	hs.middlewares = append(hs.middlewares, ms...)
 }
 
-func (hs *HttpServer) ListenAndServe() {
+func (hs *HttpServer) ListenAndServe() error {
 	hs.g.Use(gin_middleware.GinZapLogger(logger.GetLogger()), gin_middleware.GinZapRecovery(logger.GetLogger(), ginZapRecoveryErrResponse{}))
 	hs.g.Use(hs.middlewares...)
 
@@ -112,5 +121,5 @@ func (hs *HttpServer) ListenAndServe() {
 		hs.g.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	}
 	hs.router()
-	hs.listenAndServe()
+	return hs.listenAndServe()
 }

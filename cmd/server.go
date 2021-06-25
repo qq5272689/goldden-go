@@ -22,8 +22,7 @@ var serverCmd = &cobra.Command{
 			logger.Error("初始化服务失败！！！", zap.Error(err))
 			return err
 		}
-		s.ListenAndServe()
-		return nil
+		return s.ListenAndServe()
 	},
 }
 
