@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 	"time"
 )
@@ -90,7 +91,7 @@ func (hs *HttpServer) listenAndServe() error {
 			context.Background()
 			ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 			defer cancel()
-			if err := srv.Shutdown(ctx); err != nil {
+			if err = srv.Shutdown(ctx); err != nil {
 				logger.Error("Server forced to shutdown ", zap.Error(err))
 			}
 
@@ -98,6 +99,9 @@ func (hs *HttpServer) listenAndServe() error {
 			//return http.ListenAndServe(hs.Addr, hs.g)
 		default:
 			if err != nil {
+				if strings.HasSuffix(err.Error(), "Server closed") {
+					return nil
+				}
 				return err
 			}
 		}
