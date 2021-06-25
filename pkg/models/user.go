@@ -12,5 +12,5 @@ type User struct {
 	Email        string `json:"email" gorm:"column:email"`               //邮箱地址
 	Mobile       string `json:"mobile" gorm:"column:mobile"`             //手机号
 	BaseModel
-	OldPassword string `json:"old_password" gorm:"-" swaggerignore:"true"`
+	//OldPassword string `json:"old_password" gorm:"-" swaggerignore:"true"`
 }
