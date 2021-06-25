@@ -33,7 +33,7 @@ func SearchUser(ctx *gin.Context) {
 	}
 	pageSize, err := strconv.Atoi(ctx.Query("pageSize"))
 	if err != nil {
-		pageSize = 10
+		pageSize = 1000
 	}
 	if pageSize < 1 {
 		pageSize = 1
