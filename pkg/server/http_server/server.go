@@ -46,8 +46,8 @@ func (hs *HttpServer) Server() *gin.Engine {
 // @version 1.0
 // @description GOLDDEN-GO接口
 func (hs *HttpServer) router() {
-	docs.SwaggerInfo.BasePath = "/api"
-	basePath := hs.g.Group("/api")
+	docs.SwaggerInfo.BasePath = "/api/goldden-go"
+	basePath := hs.g.Group("/api/goldden-go")
 	v1 := basePath.Group("/v1")
 	//用户相关
 	v1.GET("/user/:userid", handlers.GetUser)
@@ -118,7 +118,7 @@ func (hs *HttpServer) ListenAndServe() error {
 	hs.g.Use(hs.middlewares...)
 
 	if hs.Env == "dev" || hs.Env == "local" {
-		hs.g.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+		hs.g.GET("/swagger/goldden-go/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	}
 	hs.router()
 	return hs.listenAndServe()
