@@ -96,7 +96,7 @@ func (hs *HttpServer) listenAndServe() error {
 			}
 
 			logger.Debug("Server exiting")
-			//return http.ListenAndServe(hs.Addr, hs.g)
+			return nil
 		default:
 			if err != nil {
 				if strings.HasSuffix(err.Error(), "Server closed") {
