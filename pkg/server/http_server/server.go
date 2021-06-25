@@ -30,6 +30,7 @@ type HttpServer struct {
 	Env         string
 	Addr        string
 	middlewares []gin.HandlerFunc
+	routers     []RouterFunc
 }
 
 func NewHttpServer(env, addr string) *HttpServer {
@@ -58,6 +59,15 @@ func (hs *HttpServer) router() {
 	v1.GET("/logout", handlers.LogOut)
 	v1.POST("/login/local", handlers.LoginLocal)
 	v1.GET("/userinfo", handlers.UserInfo)
+	for _, rf := range hs.routers {
+		rf(hs.g)
+	}
+}
+
+type RouterFunc func(g *gin.Engine)
+
+func (hs *HttpServer) ExtendRouter(rfs ...RouterFunc) {
+	hs.routers = append(hs.routers, rfs...)
 }
 
 func (hs *HttpServer) listenAndServe() error {
