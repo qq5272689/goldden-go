@@ -14,6 +14,7 @@ import (
 type UserService interface {
 	GetUser(id int) (d models.User, err error)
 	GetUserWithName(name string) (d models.User, err error)
+	GetUserWithGroup(g int) (ds []models.User, err error)
 	CheckPassword(name, password string) (ok bool, err error)
 	CreateUser(d *models.User) (err error)
 	UpdateUser(d *models.User) (err error)
@@ -67,6 +68,21 @@ func (db *UserServiceDB) GetUserWithName(name string) (d models.User, err error)
 		Where(" name=?", name)
 	err = tx.Last(&d).Error
 	d.Password = ""
+	return
+}
+
+func (db *UserServiceDB) GetUserWithGroup(g int) (ds []models.User, err error) {
+	logger.Debug("GetUser 接受到任务：", zap.Int("group", g))
+	tx := db.DB.Model(&models.User{}).
+		Where(" group=?", g)
+
+	ds = []models.User{}
+	if err = tx.Find(&ds).Error; err != nil {
+		return nil, err
+	}
+	for i := range ds {
+		ds[i].Password = ""
+	}
 	return
 }
 

@@ -50,6 +50,7 @@ func (hs *HttpServer) router() {
 	//用户相关
 	v1.GET("/user/:userid", handlers.GetUser)
 	v1.GET("/user", handlers.SearchUser)
+	v1.GET("/user/group", handlers.GetUserWithGroup)
 	v1.PUT("/user", handlers.UpdateUser)
 	v1.POST("/user", handlers.CreateUser)
 	v1.DELETE("/user", handlers.DeleteUser)

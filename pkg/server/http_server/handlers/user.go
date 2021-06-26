@@ -70,6 +70,21 @@ func GetUser(ctx *gin.Context) {
 	}
 }
 
+func GetUserWithGroup(ctx *gin.Context) {
+	id, err := strconv.Atoi(ctx.Query("groupid"))
+	if err != nil {
+		logger.Warn("get group id 错误!!!错误信息：", zap.Error(err))
+		ghttp.CommonFailResponse(ctx, err.Error())
+		return
+	}
+	if d, err := service.GetUserServiceDBWithContext(ctx).GetUserWithGroup(id); err != nil {
+		logger.Warn("调用服务 GetUserWithGroup 错误!!!错误信息：", zap.Error(err))
+		ghttp.CommonFailResponse(ctx, err.Error())
+	} else {
+		ghttp.CommonSuccessResponse(ctx, d)
+	}
+}
+
 // @Tags 用户相关接口
 // ShowAccount godoc
 // @Summary 创建用户
