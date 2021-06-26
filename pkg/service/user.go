@@ -74,7 +74,7 @@ func (db *UserServiceDB) GetUserWithName(name string) (d models.User, err error)
 func (db *UserServiceDB) GetUserWithGroup(g int) (ds []models.User, err error) {
 	logger.Debug("GetUser 接受到任务：", zap.Int("group", g))
 	tx := db.DB.Model(&models.User{}).
-		Where(" group=?", g)
+		Where(" `group` = ?", g)
 
 	ds = []models.User{}
 	if err = tx.Find(&ds).Error; err != nil {
