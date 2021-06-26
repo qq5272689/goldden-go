@@ -11,7 +11,9 @@ import (
 func GormMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx := context.Background()
-		c.Set("DB", DB.WithContext(ctx))
+		defer func() {
+			c.Set("DB", DB.WithContext(ctx))
+		}()
 		logger.Debug("设置数据库接口成功！！！")
 		goldden_claims_I, exists := c.Get("goldden_claims")
 		if !exists {
@@ -22,23 +24,15 @@ func GormMiddleware() gin.HandlerFunc {
 			logger.Error("转换goldden_claims失败")
 			return
 		}
-		if goldden_claims["username"] != nil {
-			if username, exists := goldden_claims["username"].(string); exists {
-				ctx = context.WithValue(ctx, "username", username)
-			} else {
-				ctx = context.WithValue(ctx, "username", "nobody")
-			}
-		} else {
-			ctx = context.WithValue(ctx, "username", "nobody")
-		}
-		if goldden_claims["userid"] != nil {
-			if userid, exists := goldden_claims["userid"].(string); exists {
-				ctx = context.WithValue(ctx, "userid", fmt.Sprintf("%v", userid))
-			} else {
-				ctx = context.WithValue(ctx, "userid", "nobody")
-			}
+		if goldden_claims["name"] != nil {
+			ctx = context.WithValue(ctx, "userid", fmt.Sprintf("%v", goldden_claims["name"]))
+			ctx = context.WithValue(ctx, "username", fmt.Sprintf("%v", goldden_claims["name"]))
 		} else {
 			ctx = context.WithValue(ctx, "userid", "nobody")
+			ctx = context.WithValue(ctx, "username", "nobody")
+		}
+		if goldden_claims["display_name"] != nil {
+			ctx = context.WithValue(ctx, "username", fmt.Sprintf("%v", goldden_claims["display_name"]))
 		}
 
 	}
