@@ -1,2 +1,4 @@
 .idea
 mygopath
+bin/
+go.sum
