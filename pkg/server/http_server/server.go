@@ -2,11 +2,11 @@ package http_server
 
 import (
 	"context"
+	"gitee.com/goldden-go/goldden-go/pkg/server/http_server/handlers"
+	"gitee.com/goldden-go/goldden-go/pkg/utils/gin_middleware"
+	ghttp "gitee.com/goldden-go/goldden-go/pkg/utils/http"
+	"gitee.com/goldden-go/goldden-go/pkg/utils/logger"
 	"github.com/gin-gonic/gin"
-	"github.com/qq5272689/goldden-go/pkg/server/http_server/handlers"
-	"github.com/qq5272689/goldden-go/pkg/utils/gin_middleware"
-	ghttp "github.com/qq5272689/goldden-go/pkg/utils/http"
-	"github.com/qq5272689/goldden-go/pkg/utils/logger"
 	"go.uber.org/zap"
 	"net/http"
 	"os"

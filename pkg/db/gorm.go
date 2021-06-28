@@ -1,7 +1,7 @@
 package db
 
 import (
-	"github.com/qq5272689/goldden-go/pkg/models"
+	"gitee.com/goldden-go/goldden-go/pkg/models"
 
 	"gorm.io/gorm"
 )

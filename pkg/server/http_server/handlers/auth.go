@@ -1,15 +1,15 @@
 package handlers
 
 import (
+	"gitee.com/goldden-go/goldden-go/pkg/service"
+	"gitee.com/goldden-go/goldden-go/pkg/utils/auth"
+	"gitee.com/goldden-go/goldden-go/pkg/utils/captcha"
+	ghttp "gitee.com/goldden-go/goldden-go/pkg/utils/http"
+	"gitee.com/goldden-go/goldden-go/pkg/utils/jwt"
+	"gitee.com/goldden-go/goldden-go/pkg/utils/logger"
+	"gitee.com/goldden-go/goldden-go/pkg/utils/types"
 	jwtgo "github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
-	"github.com/qq5272689/goldden-go/pkg/service"
-	"github.com/qq5272689/goldden-go/pkg/utils/auth"
-	"github.com/qq5272689/goldden-go/pkg/utils/captcha"
-	ghttp "github.com/qq5272689/goldden-go/pkg/utils/http"
-	"github.com/qq5272689/goldden-go/pkg/utils/jwt"
-	"github.com/qq5272689/goldden-go/pkg/utils/logger"
-	"github.com/qq5272689/goldden-go/pkg/utils/types"
 	"go.uber.org/zap"
 )
 

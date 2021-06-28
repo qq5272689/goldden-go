@@ -1,11 +1,11 @@
 package cmd
 
 import (
-	"github.com/qq5272689/goldden-go/pkg/db"
-	"github.com/qq5272689/goldden-go/pkg/server/http_server"
-	"github.com/qq5272689/goldden-go/pkg/service"
-	"github.com/qq5272689/goldden-go/pkg/utils/jwt"
-	"github.com/qq5272689/goldden-go/pkg/utils/logger"
+	"gitee.com/goldden-go/goldden-go/pkg/db"
+	"gitee.com/goldden-go/goldden-go/pkg/server/http_server"
+	"gitee.com/goldden-go/goldden-go/pkg/service"
+	"gitee.com/goldden-go/goldden-go/pkg/utils/jwt"
+	"gitee.com/goldden-go/goldden-go/pkg/utils/logger"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 

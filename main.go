@@ -1,6 +1,6 @@
 package main
 
-import "github.com/qq5272689/goldden-go/cmd"
+import "gitee.com/goldden-go/goldden-go/cmd"
 
 func main() {
 	cmd.Execute()

@@ -3,12 +3,12 @@ package handlers
 import (
 	"strconv"
 
+	"gitee.com/goldden-go/goldden-go/pkg/models"
+	"gitee.com/goldden-go/goldden-go/pkg/service"
+	ghttp "gitee.com/goldden-go/goldden-go/pkg/utils/http"
+	"gitee.com/goldden-go/goldden-go/pkg/utils/logger"
+	"gitee.com/goldden-go/goldden-go/pkg/utils/types"
 	"github.com/gin-gonic/gin"
-	"github.com/qq5272689/goldden-go/pkg/models"
-	"github.com/qq5272689/goldden-go/pkg/service"
-	ghttp "github.com/qq5272689/goldden-go/pkg/utils/http"
-	"github.com/qq5272689/goldden-go/pkg/utils/logger"
-	"github.com/qq5272689/goldden-go/pkg/utils/types"
 	"go.uber.org/zap"
 )
 

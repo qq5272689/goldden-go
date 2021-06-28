@@ -1,11 +1,11 @@
 package captcha
 
 import (
+	"gitee.com/goldden-go/goldden-go/pkg/utils/jwt"
+	"gitee.com/goldden-go/goldden-go/pkg/utils/logger"
 	jwtgo "github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/mojocn/base64Captcha"
-	"github.com/qq5272689/goldden-go/pkg/utils/jwt"
-	"github.com/qq5272689/goldden-go/pkg/utils/logger"
 	"go.uber.org/zap"
 )
 

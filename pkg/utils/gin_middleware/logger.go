@@ -2,8 +2,8 @@ package gin_middleware
 
 import (
 	"fmt"
+	"gitee.com/goldden-go/goldden-go/pkg/utils/logger"
 	"github.com/gin-gonic/gin"
-	"github.com/qq5272689/goldden-go/pkg/utils/logger"
 	"go.uber.org/zap"
 	"time"
 )

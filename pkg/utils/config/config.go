@@ -1,9 +1,9 @@
 package config
 
 import (
+	"gitee.com/goldden-go/goldden-go/pkg/utils/base_dir"
+	"gitee.com/goldden-go/goldden-go/pkg/utils/logger"
 	"github.com/mitchellh/go-homedir"
-	"github.com/qq5272689/goldden-go/pkg/utils/base_dir"
-	"github.com/qq5272689/goldden-go/pkg/utils/logger"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 	"path"

@@ -1,4 +1,4 @@
-module github.com/qq5272689/goldden-go
+module gitee.com/goldden-go/goldden-go
 
 go 1.16
 

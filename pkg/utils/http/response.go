@@ -1,8 +1,8 @@
 package http
 
 import (
+	"gitee.com/goldden-go/goldden-go/pkg/utils/types"
 	"github.com/gin-gonic/gin"
-	"github.com/qq5272689/goldden-go/pkg/utils/types"
 	"net/http"
 )
 

@@ -3,7 +3,7 @@
 package db
 
 import (
-	"github.com/qq5272689/goldden-go/pkg/utils/logger"
+	"gitee.com/goldden-go/goldden-go/pkg/utils/logger"
 	"go.uber.org/zap"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"

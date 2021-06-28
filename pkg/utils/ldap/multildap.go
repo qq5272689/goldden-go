@@ -2,9 +2,9 @@ package ldap
 
 import (
 	"errors"
-	"github.com/qq5272689/goldden-go/pkg/models"
-	"github.com/qq5272689/goldden-go/pkg/utils/auth"
-	"github.com/qq5272689/goldden-go/pkg/utils/logger"
+	"gitee.com/goldden-go/goldden-go/pkg/models"
+	"gitee.com/goldden-go/goldden-go/pkg/utils/auth"
+	"gitee.com/goldden-go/goldden-go/pkg/utils/logger"
 	"go.uber.org/zap"
 )
 
