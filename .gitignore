@@ -2,3 +2,5 @@
 mygopath
 bin/
 go.sum
+conf/
+_debug_bin
