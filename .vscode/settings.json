@@ -1,5 +1,3 @@
 {
-    "go.addTags": {
-        "tags": "json mysql"
-    }
+    "go.buildTags": "mysql"
 }
