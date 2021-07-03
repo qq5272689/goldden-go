@@ -50,6 +50,7 @@ func (db *UserServiceDB) InitSuperAdmin() (err error) {
 		DisplayName: "Admin",
 		Password:    "Gold@admin123",
 		SuperAdmin:  true,
+		Group:       1,
 	})
 }
 
