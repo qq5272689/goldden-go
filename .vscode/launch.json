@@ -11,7 +11,13 @@
             "mode": "auto",
             "program": "${workspaceFolder}/main.go",
             "buildFlags": "--tags mysql",
-            "args": ["server","--env","local","--migrate"]
+            "args": [
+                "server",
+                "--env",
+                "local",
+                "--migrate"
+            ],
+            "cwd": "${workspaceFolder}/bin",
         }
     ]
 }

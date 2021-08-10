@@ -2,9 +2,10 @@ package ldap
 
 import (
 	"errors"
+
 	"gitee.com/goldden-go/goldden-go/pkg/models"
-	"gitee.com/goldden-go/goldden-go/pkg/utils/auth"
 	"gitee.com/goldden-go/goldden-go/pkg/utils/logger"
+	"gitee.com/goldden-go/goldden-go/pkg/utils/types"
 	"go.uber.org/zap"
 )
 
@@ -25,7 +26,7 @@ type ServerStatus struct {
 // IMultiLDAP is interface for MultiLDAP
 type IMultiLDAP interface {
 	Ping() ([]*ServerStatus, error)
-	Login(query *auth.LoginData) (
+	Login(query *types.LoginData) (
 		*models.User, error,
 	)
 
@@ -81,7 +82,7 @@ func (multiples *MultiLDAP) Ping() ([]*ServerStatus, error) {
 }
 
 // Login tries to log in the user in multiples LDAP
-func (multiples *MultiLDAP) Login(query *auth.LoginData) (
+func (multiples *MultiLDAP) Login(query *types.LoginData) (
 	*models.User, error,
 ) {
 	if len(multiples.configs) == 0 {

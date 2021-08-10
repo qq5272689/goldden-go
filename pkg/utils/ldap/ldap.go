@@ -5,17 +5,18 @@ import (
 	"crypto/x509"
 	"errors"
 	"fmt"
-	"gitee.com/goldden-go/goldden-go/pkg/models"
-	"gitee.com/goldden-go/goldden-go/pkg/utils/auth"
-	"gitee.com/goldden-go/goldden-go/pkg/utils/logger"
-	"github.com/davecgh/go-spew/spew"
-	goldap "github.com/go-ldap/ldap"
-	"go.uber.org/zap"
 	"io/ioutil"
 	"math"
 	"net"
 	"strconv"
 	"strings"
+
+	"gitee.com/goldden-go/goldden-go/pkg/models"
+	"gitee.com/goldden-go/goldden-go/pkg/utils/logger"
+	"gitee.com/goldden-go/goldden-go/pkg/utils/types"
+	"github.com/davecgh/go-spew/spew"
+	goldap "github.com/go-ldap/ldap"
+	"go.uber.org/zap"
 )
 
 // Config holds list of connections to LDAP
@@ -131,7 +132,7 @@ type IConnection interface {
 
 // IServer LDAP 服务端认证接口interface
 type IServer interface {
-	Login(data *auth.LoginData) (*models.User, error)
+	Login(data *types.LoginData) (*models.User, error)
 	Users([]string) ([]*models.User, error)
 	Bind() error
 	UserBind(string, string) error
@@ -271,7 +272,7 @@ func (server *Server) Close() {
 //
 // Dial() sets the connection with the server for this Struct. Therefore, we require a
 // call to Dial() before being able to execute this function.
-func (server *Server) Login(query *auth.LoginData) (
+func (server *Server) Login(query *types.LoginData) (
 	*models.User, error,
 ) {
 	var err error

@@ -5,8 +5,11 @@ import (
 	"gitee.com/goldden-go/goldden-go/pkg/server/http_server"
 	"gitee.com/goldden-go/goldden-go/pkg/service"
 	"gitee.com/goldden-go/goldden-go/pkg/utils/jwt"
+	"gitee.com/goldden-go/goldden-go/pkg/utils/ldap"
 	"gitee.com/goldden-go/goldden-go/pkg/utils/logger"
+	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
+	"go.uber.org/multierr"
 	"go.uber.org/zap"
 
 	"github.com/spf13/cobra"
@@ -22,6 +25,7 @@ var serverCmd = &cobra.Command{
 			logger.Error("初始化服务失败！！！", zap.Error(err))
 			return err
 		}
+
 		return s.ListenAndServe()
 	},
 }
@@ -38,6 +42,23 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	serverCmd.Flags().BoolP("migrate", "", false, "数据库migrate")
+}
+
+func ldapInit() (iml ldap.IMultiLDAP, err error) {
+	sc := []*ldap.ServerConfig{}
+	err = viper.UnmarshalKey("auth.ldap.servers", &sc)
+	if err != nil {
+		return nil, err
+	}
+	iml = ldap.NewMultiLDAP(sc)
+	lss, err := iml.Ping()
+	if err != nil {
+		return nil, err
+	}
+	for _, ls := range lss {
+		err = multierr.Append(err, ls.Error)
+	}
+	return iml, err
 }
 
 func serverInit(cmd *cobra.Command) (s *http_server.HttpServer, err error) {
@@ -57,6 +78,12 @@ func serverInit(cmd *cobra.Command) (s *http_server.HttpServer, err error) {
 	if err != nil {
 		return nil, err
 	}
-	s.AddMiddleware(gj.GinJwtMiddleware, db.GormMiddleware())
+	iml, err := ldapInit()
+	if err != nil {
+		return nil, err
+	}
+	s.AddMiddleware(gj.GinJwtMiddleware, db.GormMiddleware(), func(c *gin.Context) {
+		c.Set("IML", iml)
+	})
 	return
 }

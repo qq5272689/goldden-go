@@ -1,4 +1,4 @@
-package auth
+package types
 
 type LoginData struct {
 	Name     string `json:"name"`

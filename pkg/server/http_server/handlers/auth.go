@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"gitee.com/goldden-go/goldden-go/pkg/service"
-	"gitee.com/goldden-go/goldden-go/pkg/utils/auth"
 	"gitee.com/goldden-go/goldden-go/pkg/utils/captcha"
 	ghttp "gitee.com/goldden-go/goldden-go/pkg/utils/http"
 	"gitee.com/goldden-go/goldden-go/pkg/utils/jwt"
@@ -36,11 +35,11 @@ func Verify(ctx *gin.Context) {
 // @Summary 本地用户登录
 // @Description 本地用户登录
 // @Produce  json
-// @Param data body auth.LoginData  true "登录信息"
+// @Param data body types.LoginData  true "登录信息"
 // @Router /v1/login/local [post]
 // @Success 200 {object} ghttp.HttpResult
 func LoginLocal(ctx *gin.Context) {
-	ld := &auth.LoginData{}
+	ld := &types.LoginData{}
 	if err := ghttp.GetBody(ctx, ld); err != nil {
 		logger.Warn("调用服务 GetBody 错误!!!错误信息：", zap.Error(err))
 		ghttp.CommonErrorCodeResponse(ctx, 50000, err)

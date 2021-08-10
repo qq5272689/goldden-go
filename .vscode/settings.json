@@ -1,3 +1,4 @@
 {
-    "go.buildTags": "mysql"
+    "go.buildTags": "mysql",
+    "go.testTags": "mysql"
 }

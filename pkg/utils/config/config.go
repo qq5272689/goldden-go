@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"gitee.com/goldden-go/goldden-go/pkg/utils/base_dir"
+	"gitee.com/goldden-go/goldden-go/pkg/utils/ldap"
 	"gitee.com/goldden-go/goldden-go/pkg/utils/logger"
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
@@ -60,6 +61,8 @@ e2gKBcM0f+h06uDwbveyUlxgnd6p4i0D69Kg6IiPcgZJWSZ0BvoZ7+MI/ZGLPdx5
 qdxS6V5MFi8tWrhRHCo0jGA=
 -----END PRIVATE KEY-----
 `)
+	viper.SetDefault("auth.ldap.enable", false)
+	viper.SetDefault("auth.ldap.servers", []*ldap.ServerConfig{})
 }
 
 func InitConfig(cfgFile, configNmae string) error {
