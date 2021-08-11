@@ -69,18 +69,18 @@ type AttributeMap struct {
 //	OrgRole models.RoleType `json:"org_role"`
 //}
 
-func isMemberOf(memberOf []string, group string) bool {
-	if group == "*" {
-		return true
-	}
+// func isMemberOf(memberOf []string, group string) bool {
+// 	if group == "*" {
+// 		return true
+// 	}
 
-	for _, member := range memberOf {
-		if strings.EqualFold(member, group) {
-			return true
-		}
-	}
-	return false
-}
+// 	for _, member := range memberOf {
+// 		if strings.EqualFold(member, group) {
+// 			return true
+// 		}
+// 	}
+// 	return false
+// }
 
 func appendIfNotEmpty(slice []string, values ...string) []string {
 	for _, v := range values {
@@ -378,6 +378,7 @@ func (server *Server) Users(logins []string) (
 
 	logger.Debug(
 		"LDAP users found", zap.String("users", spew.Sdump(serializedUsers)),
+		zap.Any("ldap_users", users),
 	)
 
 	return serializedUsers, nil
@@ -503,8 +504,7 @@ func (server *Server) buildGolddenUser(user *goldap.Entry) (*models.User, error)
 
 	attrs := server.Config.Attr
 	extUser := &models.User{
-		//AuthModule: models.AuthModuleLDAP,
-		//AuthId:     user.DN,
+		AuthModule: models.AuthModuleLDAP,
 		Name: strings.TrimSpace(
 			fmt.Sprintf(
 				"%s %s",

@@ -78,12 +78,17 @@ func serverInit(cmd *cobra.Command) (s *http_server.HttpServer, err error) {
 	if err != nil {
 		return nil, err
 	}
-	iml, err := ldapInit()
-	if err != nil {
-		return nil, err
+
+	s.AddMiddleware(gj.GinJwtMiddleware, db.GormMiddleware())
+	if viper.GetBool("auth.ldap.enable") {
+		logger.Debug("ldap 开启")
+		iml, err := ldapInit()
+		if err != nil {
+			return nil, err
+		}
+		s.AddMiddleware(func(c *gin.Context) {
+			c.Set("IML", iml)
+		})
 	}
-	s.AddMiddleware(gj.GinJwtMiddleware, db.GormMiddleware(), func(c *gin.Context) {
-		c.Set("IML", iml)
-	})
 	return
 }

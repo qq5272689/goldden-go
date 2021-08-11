@@ -1,4 +1,7 @@
 {
     "go.buildTags": "mysql",
-    "go.testTags": "mysql"
+    "go.testTags": "mysql",
+    "go.addTags": {
+        "tags": "json,yaml"
+    }
 }

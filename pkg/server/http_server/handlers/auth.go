@@ -1,14 +1,18 @@
 package handlers
 
 import (
+	"errors"
+
 	"gitee.com/goldden-go/goldden-go/pkg/service"
 	"gitee.com/goldden-go/goldden-go/pkg/utils/captcha"
 	ghttp "gitee.com/goldden-go/goldden-go/pkg/utils/http"
 	"gitee.com/goldden-go/goldden-go/pkg/utils/jwt"
+	"gitee.com/goldden-go/goldden-go/pkg/utils/ldap"
 	"gitee.com/goldden-go/goldden-go/pkg/utils/logger"
 	"gitee.com/goldden-go/goldden-go/pkg/utils/types"
 	jwtgo "github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 	"go.uber.org/zap"
 )
 
@@ -39,29 +43,19 @@ func Verify(ctx *gin.Context) {
 // @Router /v1/login/local [post]
 // @Success 200 {object} ghttp.HttpResult
 func LoginLocal(ctx *gin.Context) {
-	ld := &types.LoginData{}
-	if err := ghttp.GetBody(ctx, ld); err != nil {
-		logger.Warn("调用服务 GetBody 错误!!!错误信息：", zap.Error(err))
-		ghttp.CommonErrorCodeResponse(ctx, 50000, err)
-		return
-	}
-	captchaid, err := ctx.Cookie("captchaid")
+	ld, err := loginFirstCheck(ctx)
 	if err != nil {
-		logger.Warn("验证码已过期!!!")
-		ghttp.CommonFailCodeResponse(ctx, 50001, "验证码已过期!!!")
 		return
 	}
-	cok := captcha.GetCaptcha(ctx).Verify(captchaid, ld.Verify, true)
-	if !cok {
-		logger.Warn("验证码验证失败!!!")
-		ghttp.CommonFailCodeResponse(ctx, 50002, "验证码验证失败!!!")
-		return
-	}
-
 	ok, _ := service.GetUserServiceDBWithContext(ctx).CheckPassword(ld.Name, ld.Password)
 	if !ok {
 		logger.Warn("用户名密码验证失败!!!")
-		ghttp.CommonFailCodeResponse(ctx, 50003, "用户名密码验证失败!!!")
+		if viper.GetBool("auth.ldap.enable") {
+			loginLdap(ctx, ld)
+		} else {
+			ghttp.CommonFailCodeResponse(ctx, 50003, "用户名密码验证失败!!!")
+		}
+
 		return
 	}
 	u, err := service.GetUserServiceDBWithContext(ctx).GetUserWithName(ld.Name)
@@ -71,6 +65,74 @@ func LoginLocal(ctx *gin.Context) {
 		return
 	}
 	u.Password = ""
+	goldden_jwt_I, exists := ctx.Get("goldden_jwt")
+	if !exists {
+		logger.Warn("获取用户信息失败!!!")
+		ghttp.CommonFailCodeResponse(ctx, 50005, "获取JWT失败!!!")
+		return
+	}
+	goldden_jwt, ok := goldden_jwt_I.(*jwt.GolddenJwt)
+	if !ok {
+		logger.Warn("获取JWT失败!!!")
+		ghttp.CommonFailCodeResponse(ctx, 50006, "获取JWT失败!!!")
+		return
+	}
+	claims := jwtgo.MapClaims{}
+	types.JsonStruct(u, &claims)
+	tokenStr, _ := goldden_jwt.CreateTokenAndSetCookie(claims, ctx)
+
+	ghttp.CommonSuccessResponse(ctx, tokenStr)
+}
+
+func loginFirstCheck(ctx *gin.Context) (*types.LoginData, error) {
+	ld := &types.LoginData{}
+	if err := ghttp.GetBody(ctx, ld); err != nil {
+		logger.Warn("调用服务 GetBody 错误!!!错误信息：", zap.Error(err))
+		ghttp.CommonErrorCodeResponse(ctx, 50000, err)
+		return nil, err
+	}
+	captchaid, err := ctx.Cookie("captchaid")
+	if err != nil {
+		logger.Warn("验证码已过期!!!")
+		ghttp.CommonFailCodeResponse(ctx, 50001, "验证码已过期!!!")
+		return nil, errors.New("验证码已过期!!!")
+	}
+	cok := captcha.GetCaptcha(ctx).Verify(captchaid, ld.Verify, true)
+	if !cok {
+		logger.Warn("验证码验证失败!!!")
+		ghttp.CommonFailCodeResponse(ctx, 50002, "验证码验证失败!!!")
+		return nil, errors.New("验证码验证失败!!!")
+	}
+	return ld, nil
+}
+
+func LoginLdap(ctx *gin.Context) {
+	ld, err := loginFirstCheck(ctx)
+	if err != nil {
+		return
+	}
+	loginLdap(ctx, ld)
+}
+
+func loginLdap(ctx *gin.Context, ld *types.LoginData) {
+	imli, ok := ctx.Get("IML")
+	if !ok {
+		logger.Warn("获取IML失败!!!")
+		ghttp.CommonFailCodeResponse(ctx, 50006, "获取IML失败!!!")
+		return
+	}
+	iml, ok := imli.(ldap.IMultiLDAP)
+	if !ok {
+		logger.Warn("转换IML失败!!!")
+		ghttp.CommonFailCodeResponse(ctx, 50006, "转换IML失败!!!")
+		return
+	}
+	u, err := iml.Login(ld)
+	if err != nil {
+		logger.Warn("LDAP登录失败!!!")
+		ghttp.CommonFailCodeResponse(ctx, 50004, "LDAP登录失败!!!")
+		return
+	}
 	goldden_jwt_I, exists := ctx.Get("goldden_jwt")
 	if !exists {
 		logger.Warn("获取用户信息失败!!!")
