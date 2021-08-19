@@ -4,3 +4,4 @@ bin/
 go.sum
 conf/
 __debug_bin
+ui
