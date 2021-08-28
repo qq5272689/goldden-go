@@ -1,9 +1,10 @@
 package http
 
 import (
+	"net/http"
+
 	"gitee.com/goldden-go/goldden-go/pkg/utils/types"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 type HttpResult struct {

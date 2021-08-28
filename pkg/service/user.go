@@ -134,7 +134,8 @@ func (db *UserServiceDB) SearchUser(filter string, pageNo, pageSize int) (td *ty
 	logger.Debug("SearchAlert接受到任务：", zap.String("filter", filter), zap.Int("pageno", pageNo), zap.Int("pagesize", pageSize))
 	tx := db.DB.Model(&models.User{})
 	if filter != "" {
-		tx = tx.Where("content like ?", "%"+filter+"%")
+		fk := "%" + filter + "%"
+		tx = tx.Where("name like ? or display_name like ? or email like ? or mobile  like ? ", fk, fk, fk, fk)
 	}
 	var count int64
 	if err = tx.Count(&count).Error; err != nil {

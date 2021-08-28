@@ -24,6 +24,10 @@ import (
 // @Success 200 {object} ghttp.HttpResult
 func SearchUser(ctx *gin.Context) {
 	filter := ctx.Query("filter")
+	keyword := ctx.Query("keyword")
+	if keyword != "" && filter == "" {
+		filter = keyword
+	}
 	pageNo, err := strconv.Atoi(ctx.Query("pageNo"))
 	if err != nil {
 		pageNo = 1
@@ -135,6 +139,7 @@ func UpdateUser(ctx *gin.Context) {
 			ghttp.CommonFailResponse(ctx, err.Error())
 		} else {
 			ghttp.CommonSuccessResponse(ctx, d)
+
 		}
 	}
 }
