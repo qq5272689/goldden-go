@@ -1,6 +1,8 @@
 package captcha
 
 import (
+	"errors"
+
 	"gitee.com/golden-go/golden-go/pkg/utils/jwt"
 	"gitee.com/golden-go/golden-go/pkg/utils/logger"
 	jwtgo "github.com/dgrijalva/jwt-go"
@@ -13,23 +15,24 @@ type CookieStore struct {
 	Ctx *gin.Context
 }
 
-func (cs *CookieStore) Set(id string, value string) {
+func (cs *CookieStore) Set(id string, value string) error {
 	golden_jwt_I, exists := cs.Ctx.Get("golden_jwt")
 	if !exists {
 		logger.Error("golden_jwt doesn't exist")
-		return
+		return errors.New("golden_jwt doesn't exist")
 	}
 	gj, ok := golden_jwt_I.(*jwt.GoldenJwt)
 	if !ok {
 		logger.Error("golden_jwt doesn't exist")
-		return
+		return errors.New("golden_jwt doesn't exist")
 	}
 	tokenStr, err := gj.CreateToken(jwtgo.MapClaims{"captcha_id": id, id: value})
 	if err != nil {
 		logger.Error("CreateToken fail", zap.Error(err))
-		return
+		return err
 	}
 	cs.Ctx.SetCookie("golden_captcha", tokenStr, gj.Exp, "", "", false, false)
+	return nil
 }
 
 func (cs *CookieStore) Get(id string, clear bool) string {
