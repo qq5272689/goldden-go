@@ -91,7 +91,8 @@ func (cs *CookieStore) Verify(id, answer string, clear bool) bool {
 }
 
 func GetCaptcha(ctx *gin.Context) *base64Captcha.Captcha {
-	store := base64Captcha.DefaultMemStore
+	var store base64Captcha.Store
+	store = base64Captcha.DefaultMemStore
 	if ctx != nil {
 		logger.Debug("cookiestore")
 		store = &CookieStore{Ctx: ctx}
