@@ -10,8 +10,8 @@ import (
 	"gitee.com/golden-go/golden-go/pkg/utils/ldap"
 	"gitee.com/golden-go/golden-go/pkg/utils/logger"
 	"gitee.com/golden-go/golden-go/pkg/utils/types"
-	jwtgo "github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	jwtgo "github.com/golang-jwt/jwt"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 )

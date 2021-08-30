@@ -6,9 +6,9 @@ import (
 	"time"
 
 	"gitee.com/golden-go/golden-go/pkg/utils/logger"
-	jwtgo "github.com/dgrijalva/jwt-go"
-	"github.com/dgrijalva/jwt-go/request"
 	"github.com/gin-gonic/gin"
+	jwtgo "github.com/golang-jwt/jwt"
+	"github.com/golang-jwt/jwt/request"
 )
 
 type GoldenJwt struct {

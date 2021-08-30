@@ -5,8 +5,8 @@ import (
 
 	"gitee.com/golden-go/golden-go/pkg/utils/jwt"
 	"gitee.com/golden-go/golden-go/pkg/utils/logger"
-	jwtgo "github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	jwtgo "github.com/golang-jwt/jwt"
 	"github.com/mojocn/base64Captcha"
 	"go.uber.org/zap"
 )

@@ -5,8 +5,8 @@ import (
 	"fmt"
 
 	"gitee.com/golden-go/golden-go/pkg/utils/logger"
-	jwtgo "github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	jwtgo "github.com/golang-jwt/jwt"
 )
 
 func GormMiddleware() gin.HandlerFunc {
