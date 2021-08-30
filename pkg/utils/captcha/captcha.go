@@ -14,14 +14,14 @@ type CookieStore struct {
 }
 
 func (cs *CookieStore) Set(id string, value string) {
-	goldden_jwt_I, exists := cs.Ctx.Get("goldden_jwt")
+	golden_jwt_I, exists := cs.Ctx.Get("golden_jwt")
 	if !exists {
-		logger.Error("goldden_jwt doesn't exist")
+		logger.Error("golden_jwt doesn't exist")
 		return
 	}
-	gj, ok := goldden_jwt_I.(*jwt.GolddenJwt)
+	gj, ok := golden_jwt_I.(*jwt.GoldenJwt)
 	if !ok {
-		logger.Error("goldden_jwt doesn't exist")
+		logger.Error("golden_jwt doesn't exist")
 		return
 	}
 	tokenStr, err := gj.CreateToken(jwtgo.MapClaims{"captcha_id": id, id: value})
@@ -29,23 +29,23 @@ func (cs *CookieStore) Set(id string, value string) {
 		logger.Error("CreateToken fail", zap.Error(err))
 		return
 	}
-	cs.Ctx.SetCookie("goldden_captcha", tokenStr, gj.Exp, "", "", false, false)
+	cs.Ctx.SetCookie("golden_captcha", tokenStr, gj.Exp, "", "", false, false)
 }
 
 func (cs *CookieStore) Get(id string, clear bool) string {
-	tokenStr, err := cs.Ctx.Cookie("goldden_captcha")
+	tokenStr, err := cs.Ctx.Cookie("golden_captcha")
 	if err != nil {
-		logger.Error("获取 goldden_captcha cookie失败", zap.Error(err))
+		logger.Error("获取 golden_captcha cookie失败", zap.Error(err))
 		return ""
 	}
-	goldden_jwt_I, exists := cs.Ctx.Get("goldden_jwt")
+	golden_jwt_I, exists := cs.Ctx.Get("golden_jwt")
 	if !exists {
-		logger.Error("goldden_jwt doesn't exist")
+		logger.Error("golden_jwt doesn't exist")
 		return ""
 	}
-	gj, ok := goldden_jwt_I.(*jwt.GolddenJwt)
+	gj, ok := golden_jwt_I.(*jwt.GoldenJwt)
 	if !ok {
-		logger.Error("goldden_jwt doesn't exist")
+		logger.Error("golden_jwt doesn't exist")
 		return ""
 	}
 	claims, err := gj.GetClaimsFromToken(tokenStr)
@@ -61,7 +61,7 @@ func (cs *CookieStore) Get(id string, clear bool) string {
 			if err != nil {
 				logger.Error("CreateToken fail", zap.Error(err))
 			}
-			cs.Ctx.SetCookie("goldden_captcha", tokenStr, gj.Exp, "", "", false, false)
+			cs.Ctx.SetCookie("golden_captcha", tokenStr, gj.Exp, "", "", false, false)
 		}
 	}()
 	if claims["captcha_id"] == nil {

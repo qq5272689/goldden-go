@@ -313,7 +313,7 @@ func (server *Server) Login(query *types.LoginData) (
 	}
 
 	user := users[0]
-	if err := server.validateGolddenUser(user); err != nil {
+	if err := server.validateGoldenUser(user); err != nil {
 		return nil, err
 	}
 
@@ -432,10 +432,10 @@ func (server *Server) users(logins []string) (
 	return result.Entries, nil
 }
 
-// validateGolddenUser validates user access.
+// validateGoldenUser validates user access.
 // If there are no ldap group mappings access is true
 // otherwise a single group must match
-func (server *Server) validateGolddenUser(user *models.User) error {
+func (server *Server) validateGoldenUser(user *models.User) error {
 	/*	if len(server.Config.Groups) > 0 && len(user.OrgRoles) < 1 {
 		logger.Error(
 			"User does not belong in any of the specified LDAP groups",
@@ -495,8 +495,8 @@ func (server *Server) getSearchRequest(
 	return searchRequest
 }
 
-// buildGolddenUser extracts info from UserInfo model to ExternalUserInfo
-func (server *Server) buildGolddenUser(user *goldap.Entry) (*models.User, error) {
+// buildGoldenUser extracts info from UserInfo model to ExternalUserInfo
+func (server *Server) buildGoldenUser(user *goldap.Entry) (*models.User, error) {
 	/*	memberOf, err := server.getMemberOf(user)
 		if err != nil {
 			return nil, err
@@ -659,7 +659,7 @@ func (server *Server) serializeUsers(
 	var serialized []*models.User
 
 	for _, user := range entries {
-		extUser, err := server.buildGolddenUser(user)
+		extUser, err := server.buildGoldenUser(user)
 		if err != nil {
 			return nil, err
 		}

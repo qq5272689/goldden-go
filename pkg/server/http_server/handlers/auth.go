@@ -65,13 +65,13 @@ func LoginLocal(ctx *gin.Context) {
 		return
 	}
 	u.Password = ""
-	goldden_jwt_I, exists := ctx.Get("goldden_jwt")
+	golden_jwt_I, exists := ctx.Get("golden_jwt")
 	if !exists {
 		logger.Warn("获取用户信息失败!!!")
 		ghttp.CommonFailCodeResponse(ctx, 50005, "获取JWT失败!!!")
 		return
 	}
-	goldden_jwt, ok := goldden_jwt_I.(*jwt.GolddenJwt)
+	golden_jwt, ok := golden_jwt_I.(*jwt.GoldenJwt)
 	if !ok {
 		logger.Warn("获取JWT失败!!!")
 		ghttp.CommonFailCodeResponse(ctx, 50006, "获取JWT失败!!!")
@@ -79,7 +79,7 @@ func LoginLocal(ctx *gin.Context) {
 	}
 	claims := jwtgo.MapClaims{}
 	types.JsonStruct(u, &claims)
-	tokenStr, _ := goldden_jwt.CreateTokenAndSetCookie(claims, ctx)
+	tokenStr, _ := golden_jwt.CreateTokenAndSetCookie(claims, ctx)
 
 	ghttp.CommonSuccessResponse(ctx, tokenStr)
 }
@@ -133,13 +133,13 @@ func loginLdap(ctx *gin.Context, ld *types.LoginData) {
 		ghttp.CommonFailCodeResponse(ctx, 50004, "LDAP登录失败!!!")
 		return
 	}
-	goldden_jwt_I, exists := ctx.Get("goldden_jwt")
+	golden_jwt_I, exists := ctx.Get("golden_jwt")
 	if !exists {
 		logger.Warn("获取用户信息失败!!!")
 		ghttp.CommonFailCodeResponse(ctx, 50005, "获取JWT失败!!!")
 		return
 	}
-	goldden_jwt, ok := goldden_jwt_I.(*jwt.GolddenJwt)
+	golden_jwt, ok := golden_jwt_I.(*jwt.GoldenJwt)
 	if !ok {
 		logger.Warn("获取JWT失败!!!")
 		ghttp.CommonFailCodeResponse(ctx, 50006, "获取JWT失败!!!")
@@ -147,7 +147,7 @@ func loginLdap(ctx *gin.Context, ld *types.LoginData) {
 	}
 	claims := jwtgo.MapClaims{}
 	types.JsonStruct(u, &claims)
-	tokenStr, _ := goldden_jwt.CreateTokenAndSetCookie(claims, ctx)
+	tokenStr, _ := golden_jwt.CreateTokenAndSetCookie(claims, ctx)
 
 	ghttp.CommonSuccessResponse(ctx, tokenStr)
 }
@@ -160,19 +160,19 @@ func loginLdap(ctx *gin.Context, ld *types.LoginData) {
 // @Router /v1/userinfo [get]
 // @Success 200 {object} ghttp.HttpResult
 func UserInfo(ctx *gin.Context) {
-	goldden_claims_I, exists := ctx.Get("goldden_claims")
+	golden_claims_I, exists := ctx.Get("golden_claims")
 	if !exists {
 		logger.Warn("获取用户信息失败!!!")
 		ghttp.CommonFailCodeResponse(ctx, 50000, "获取用户信息失败!!!")
 		return
 	}
-	goldden_claims, ok := goldden_claims_I.(jwtgo.MapClaims)
+	golden_claims, ok := golden_claims_I.(jwtgo.MapClaims)
 	if !ok {
 		logger.Warn("获取用户信息失败!!!")
 		ghttp.CommonFailCodeResponse(ctx, 50001, "获取用户信息失败!!!")
 		return
 	}
-	ghttp.CommonSuccessResponse(ctx, goldden_claims)
+	ghttp.CommonSuccessResponse(ctx, golden_claims)
 }
 
 // @Tags 登录相关接口
@@ -183,7 +183,7 @@ func UserInfo(ctx *gin.Context) {
 // @Router /v1/logout [get]
 // @Success 200 {object} ghttp.HttpResult
 func LogOut(ctx *gin.Context) {
-	ctx.SetCookie("goldden_key", "", 0, "", "", false, false)
+	ctx.SetCookie("golden_key", "", 0, "", "", false, false)
 	ghttp.CommonSuccessResponse(ctx, nil)
 }
 

@@ -5,6 +5,7 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"encoding/base64"
+
 	"github.com/spf13/viper"
 )
 
@@ -60,7 +61,7 @@ func AesDecrypt(cryted string, key string) string {
 }
 
 func GetPassword(pw string) string {
-	k := viper.GetString("golddengo.password.key")
+	k := viper.GetString("goldengo.password.key")
 	if k == "" {
 		k = "KY9ciRr1Q7sOgjVV"
 	}

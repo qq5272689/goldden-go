@@ -14,9 +14,9 @@ import (
 
 func init() {
 	// 16为密码加密
-	viper.SetDefault("golddengo.password.key", "KY9ciRr1Q7sOgjVV")
+	viper.SetDefault("goldengo.password.key", "KY9ciRr1Q7sOgjVV")
 	// mysql连接url
-	viper.SetDefault("mysql.dsn", "goldden_go:goldden_go123@tcp(127.0.0.1:3306)/goldden_go?charset=utf8&parseTime=True&loc=Local")
+	viper.SetDefault("mysql.dsn", "golden_go:golden_go123@tcp(127.0.0.1:3306)/golden_go?charset=utf8&parseTime=True&loc=Local")
 	//监听地址
 	viper.SetDefault("listen", ":8080")
 	//jwt token失效时间 单位分钟

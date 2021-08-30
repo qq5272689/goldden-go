@@ -62,7 +62,7 @@ func ldapInit() (iml ldap.IMultiLDAP, err error) {
 }
 
 func serverInit(cmd *cobra.Command) (s *http_server.HttpServer, err error) {
-	if err = db.OpenDB("goldden_go", viper.GetString("mysql.dsn")); err != nil {
+	if err = db.OpenDB("golden_go", viper.GetString("mysql.dsn")); err != nil {
 		return nil, err
 	}
 	if migrate, _ := cmd.Flags().GetBool("migrate"); migrate {
@@ -74,7 +74,7 @@ func serverInit(cmd *cobra.Command) (s *http_server.HttpServer, err error) {
 		return nil, err
 	}
 	s = http_server.NewHttpServer(viper.GetString("env"), viper.GetString("listen"))
-	gj, err := jwt.NewGolddenJwt(viper.GetInt("jwt.exp"), viper.GetString("jwt.publicKey"), viper.GetString("jwt.privateKey"))
+	gj, err := jwt.NewGoldenJwt(viper.GetInt("jwt.exp"), viper.GetString("jwt.publicKey"), viper.GetString("jwt.privateKey"))
 	if err != nil {
 		return nil, err
 	}
