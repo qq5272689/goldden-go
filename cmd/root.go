@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"gitee.com/goldden-go/goldden-go/pkg/utils/config"
-	"gitee.com/goldden-go/goldden-go/pkg/utils/logger"
+	"gitee.com/golden-go/golden-go/pkg/utils/config"
+	"gitee.com/golden-go/golden-go/pkg/utils/logger"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"

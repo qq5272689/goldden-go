@@ -1,12 +1,12 @@
 package cmd
 
 import (
-	"gitee.com/goldden-go/goldden-go/pkg/db"
-	"gitee.com/goldden-go/goldden-go/pkg/server/http_server"
-	"gitee.com/goldden-go/goldden-go/pkg/service"
-	"gitee.com/goldden-go/goldden-go/pkg/utils/jwt"
-	"gitee.com/goldden-go/goldden-go/pkg/utils/ldap"
-	"gitee.com/goldden-go/goldden-go/pkg/utils/logger"
+	"gitee.com/golden-go/golden-go/pkg/db"
+	"gitee.com/golden-go/golden-go/pkg/server/http_server"
+	"gitee.com/golden-go/golden-go/pkg/service"
+	"gitee.com/golden-go/golden-go/pkg/utils/jwt"
+	"gitee.com/golden-go/golden-go/pkg/utils/ldap"
+	"gitee.com/golden-go/golden-go/pkg/utils/logger"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 	"go.uber.org/multierr"

@@ -2,10 +2,11 @@ package gin_middleware
 
 import (
 	"fmt"
-	"gitee.com/goldden-go/goldden-go/pkg/utils/logger"
+	"time"
+
+	"gitee.com/golden-go/golden-go/pkg/utils/logger"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-	"time"
 )
 
 func GinZapLogger(log *zap.Logger) gin.HandlerFunc {

@@ -3,7 +3,8 @@ package db
 import (
 	"context"
 	"fmt"
-	"gitee.com/goldden-go/goldden-go/pkg/utils/logger"
+
+	"gitee.com/golden-go/golden-go/pkg/utils/logger"
 	jwtgo "github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 )

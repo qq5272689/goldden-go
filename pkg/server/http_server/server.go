@@ -2,18 +2,19 @@ package http_server
 
 import (
 	"context"
-	"gitee.com/goldden-go/goldden-go/pkg/server/http_server/handlers"
-	"gitee.com/goldden-go/goldden-go/pkg/utils/gin_middleware"
-	ghttp "gitee.com/goldden-go/goldden-go/pkg/utils/http"
-	"gitee.com/goldden-go/goldden-go/pkg/utils/logger"
-	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 	"net/http"
 	"os"
 	"os/signal"
 	"strings"
 	"syscall"
 	"time"
+
+	"gitee.com/golden-go/golden-go/pkg/server/http_server/handlers"
+	"gitee.com/golden-go/golden-go/pkg/utils/gin_middleware"
+	ghttp "gitee.com/golden-go/golden-go/pkg/utils/http"
+	"gitee.com/golden-go/golden-go/pkg/utils/logger"
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 type ginZapRecoveryErrResponse struct {
@@ -41,11 +42,11 @@ func (hs *HttpServer) Server() *gin.Engine {
 	return hs.g
 }
 
-// @title GOLDDEN-GO接口
+// @title GOLDEN-GO接口
 // @version 1.0
-// @description GOLDDEN-GO接口
+// @description GOLDEN-GO接口
 func (hs *HttpServer) router() {
-	basePath := hs.g.Group("/api/goldden-go")
+	basePath := hs.g.Group("/api/golden-go")
 	v1 := basePath.Group("/v1")
 	//用户相关
 	v1.GET("/user/:userid", handlers.GetUser)

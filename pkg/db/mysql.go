@@ -3,12 +3,13 @@
 package db
 
 import (
-	"gitee.com/goldden-go/goldden-go/pkg/utils/logger"
+	"strings"
+
+	"gitee.com/golden-go/golden-go/pkg/utils/logger"
 	"go.uber.org/zap"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
-	"strings"
 )
 
 func OpenDB(serviceName, dsn string) (err error) {

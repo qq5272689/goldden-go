@@ -3,11 +3,12 @@ package jwt
 import (
 	"crypto/rsa"
 	"errors"
-	"gitee.com/goldden-go/goldden-go/pkg/utils/logger"
+	"time"
+
+	"gitee.com/golden-go/golden-go/pkg/utils/logger"
 	jwtgo "github.com/dgrijalva/jwt-go"
 	"github.com/dgrijalva/jwt-go/request"
 	"github.com/gin-gonic/gin"
-	"time"
 )
 
 type GolddenJwt struct {

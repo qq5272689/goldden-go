@@ -4,9 +4,9 @@ import (
 	"path"
 	"strings"
 
-	"gitee.com/goldden-go/goldden-go/pkg/utils/base_dir"
-	"gitee.com/goldden-go/goldden-go/pkg/utils/ldap"
-	"gitee.com/goldden-go/goldden-go/pkg/utils/logger"
+	"gitee.com/golden-go/golden-go/pkg/utils/base_dir"
+	"gitee.com/golden-go/golden-go/pkg/utils/ldap"
+	"gitee.com/golden-go/golden-go/pkg/utils/logger"
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"

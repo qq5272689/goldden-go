@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 
-	"gitee.com/goldden-go/goldden-go/pkg/utils/logger"
+	"gitee.com/golden-go/golden-go/pkg/utils/logger"
 	"github.com/gin-gonic/gin"
 )
 

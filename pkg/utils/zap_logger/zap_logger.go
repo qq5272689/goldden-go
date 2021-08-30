@@ -1,11 +1,12 @@
 package zap_logger
 
 import (
-	"gitee.com/goldden-go/goldden-go/pkg/utils/log_writer"
+	"os"
+
+	"gitee.com/golden-go/golden-go/pkg/utils/log_writer"
 	"go.uber.org/multierr"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
-	"os"
 )
 
 type Closer func() error

@@ -1,10 +1,11 @@
 package logger
 
 import (
-	zl "gitee.com/goldden-go/goldden-go/pkg/utils/zap_logger"
-	"go.uber.org/zap"
 	"runtime/debug"
 	"sync"
+
+	zl "gitee.com/golden-go/golden-go/pkg/utils/zap_logger"
+	"go.uber.org/zap"
 )
 
 var logger *zap.Logger

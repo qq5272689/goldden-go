@@ -1,4 +1,4 @@
-module gitee.com/goldden-go/goldden-go
+module gitee.com/golden-go/golden-go
 
 go 1.16
 

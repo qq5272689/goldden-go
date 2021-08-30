@@ -3,7 +3,7 @@ package http
 import (
 	"net/http"
 
-	"gitee.com/goldden-go/goldden-go/pkg/utils/types"
+	"gitee.com/golden-go/golden-go/pkg/utils/types"
 	"github.com/gin-gonic/gin"
 )
 

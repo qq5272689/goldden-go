@@ -11,9 +11,9 @@ import (
 	"strconv"
 	"strings"
 
-	"gitee.com/goldden-go/goldden-go/pkg/models"
-	"gitee.com/goldden-go/goldden-go/pkg/utils/logger"
-	"gitee.com/goldden-go/goldden-go/pkg/utils/types"
+	"gitee.com/golden-go/golden-go/pkg/models"
+	"gitee.com/golden-go/golden-go/pkg/utils/logger"
+	"gitee.com/golden-go/golden-go/pkg/utils/types"
 	"github.com/davecgh/go-spew/spew"
 	goldap "github.com/go-ldap/ldap"
 	"go.uber.org/zap"

@@ -4,9 +4,6 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"gitee.com/goldden-go/goldden-go/pkg/utils/logger"
-	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 	"io/ioutil"
 	"net"
 	"net/http"
@@ -15,6 +12,10 @@ import (
 	"runtime"
 	"strings"
 	"time"
+
+	"gitee.com/golden-go/golden-go/pkg/utils/logger"
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 var (

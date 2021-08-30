@@ -1,6 +1,6 @@
-# goldden-go 介绍
+# golden-go 介绍
 ````
-goldden-go 是一个golang的工具包，也是一个golang程序的基础服务。
+golden-go 是一个golang的工具包，也是一个golang程序的基础服务。
 ````
 ## 作为工具包使用
 ````

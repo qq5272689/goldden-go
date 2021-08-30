@@ -1,11 +1,11 @@
 package service
 
 import (
-	"gitee.com/goldden-go/goldden-go/pkg/models"
-	"gitee.com/goldden-go/goldden-go/pkg/utils/crypto"
-	"gitee.com/goldden-go/goldden-go/pkg/utils/http"
-	"gitee.com/goldden-go/goldden-go/pkg/utils/logger"
-	"gitee.com/goldden-go/goldden-go/pkg/utils/types"
+	"gitee.com/golden-go/golden-go/pkg/models"
+	"gitee.com/golden-go/golden-go/pkg/utils/crypto"
+	"gitee.com/golden-go/golden-go/pkg/utils/http"
+	"gitee.com/golden-go/golden-go/pkg/utils/logger"
+	"gitee.com/golden-go/golden-go/pkg/utils/types"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"gorm.io/gorm"

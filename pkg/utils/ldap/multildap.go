@@ -3,9 +3,9 @@ package ldap
 import (
 	"errors"
 
-	"gitee.com/goldden-go/goldden-go/pkg/models"
-	"gitee.com/goldden-go/goldden-go/pkg/utils/logger"
-	"gitee.com/goldden-go/goldden-go/pkg/utils/types"
+	"gitee.com/golden-go/golden-go/pkg/models"
+	"gitee.com/golden-go/golden-go/pkg/utils/logger"
+	"gitee.com/golden-go/golden-go/pkg/utils/types"
 	"go.uber.org/zap"
 )
 

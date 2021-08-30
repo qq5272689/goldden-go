@@ -1,8 +1,8 @@
 package captcha
 
 import (
-	"gitee.com/goldden-go/goldden-go/pkg/utils/jwt"
-	"gitee.com/goldden-go/goldden-go/pkg/utils/logger"
+	"gitee.com/golden-go/golden-go/pkg/utils/jwt"
+	"gitee.com/golden-go/golden-go/pkg/utils/logger"
 	jwtgo "github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/mojocn/base64Captcha"
