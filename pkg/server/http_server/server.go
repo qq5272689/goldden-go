@@ -61,6 +61,21 @@ func (hs *HttpServer) router() {
 	v1.GET("/logout", handlers.LogOut)
 	v1.POST("/login/local", handlers.LoginLocal)
 	v1.GET("/userinfo", handlers.UserInfo)
+	basePath_old := hs.g.Group("/api/goldden-go")
+	v1_old := basePath_old.Group("/v1")
+	//用户相关
+	v1_old.GET("/user/:userid", handlers.GetUser)
+	v1_old.GET("/user", handlers.SearchUser)
+	v1_old.GET("/user/group", handlers.GetUserWithGroup)
+	v1_old.PUT("/user", handlers.UpdateUser)
+	v1_old.POST("/user", handlers.CreateUser)
+	v1_old.DELETE("/user", handlers.DeleteUser)
+
+	//登录相关
+	v1_old.GET("/verify", handlers.Verify)
+	v1_old.GET("/logout", handlers.LogOut)
+	v1_old.POST("/login/local", handlers.LoginLocal)
+	v1_old.GET("/userinfo", handlers.UserInfo)
 	for _, rf := range hs.routers {
 		rf(hs.g)
 	}
