@@ -3,6 +3,7 @@ package jwt
 import (
 	"crypto/rsa"
 	"errors"
+	"reflect"
 	"time"
 
 	"gitee.com/golden-go/golden-go/pkg/utils/logger"
@@ -43,21 +44,35 @@ func NewGoldenJwt(exp int, puk, prk string) (gj *GoldenJwt, err error) {
 	return gj, nil
 }
 
+const GoldenClaims = "golden_claims"
+
 func (gj *GoldenJwt) GinJwtMiddleware(ctx *gin.Context) {
 	ctx.Set("golden_jwt", gj)
 	claims := jwtgo.MapClaims{}
 	token, err := request.ParseFromRequest(ctx.Request, request.AuthorizationHeaderExtractor, gj.keyFunc, request.WithClaims(&claims))
 	if err == nil && token.Valid {
-		ctx.Set("golden_claims", claims)
+		ctx.Set(GoldenClaims, claims)
 		return
 	}
 	golden_key, _ := ctx.Cookie("golden_key")
 	claims, err = gj.GetClaimsFromToken(golden_key)
 	if err == nil {
-		ctx.Set("golden_claims", claims)
+		ctx.Set(GoldenClaims, claims)
 		return
 	}
 	logger.Info("token不存在")
+}
+
+func GetGoldenClaims(ctx *gin.Context) (jwtgo.Claims, error) {
+	gci, is_exist := ctx.Get(GoldenClaims)
+	if !is_exist {
+		return nil, errors.New("GoldenClaims 不存在！！！")
+	}
+	gc, ok := gci.(jwtgo.Claims)
+	if !ok {
+		return nil, errors.New("GoldenClaims 转换失败！！！实际类型为：" + reflect.TypeOf(gci).String())
+	}
+	return gc, nil
 }
 
 // createToken 生成一个RS256验证的Token
